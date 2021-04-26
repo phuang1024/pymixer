@@ -20,7 +20,7 @@
 import pygame
 import vpy
 from tkinter import Tk
-from tkinter.filedialog import asksaveasfilename
+from tkinter.filedialog import askopenfilename, asksaveasfilename
 from constants import *
 from utils import *
 pygame.init()
@@ -36,6 +36,8 @@ def main():
 
     resized = False
     width, height = INIT_WIDTH, INIT_HEIGHT
+
+    scene = vpy.types.Scene()
 
     while True:
         clock.tick(FPS)
@@ -55,7 +57,11 @@ def main():
                 elif kmod(event.key, pygame.K_s, ctrl=True):
                     path = asksaveasfilename()
                     if path:
-                        vpy.fileio.save_project(None, path)
+                        vpy.fileio.save_project(scene, path)
+                elif kmod(event.key, pygame.K_o, ctrl=True):
+                    path = askopenfilename()
+                    if path:
+                        scene = vpy.fileio.open_project(path)
 
         resized = False
 
