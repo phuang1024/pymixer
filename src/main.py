@@ -58,24 +58,24 @@ def main():
 
                 elif kmod(event.key, pygame.K_s, ctrl=True):
                     if scene.is_saved and path:
-                        vpy.fileio.save_project(scene, path)
+                        vpy.ops.core.save_project(scene, path)
                         scene.is_saved = True
                     else:
                         path = asksaveasfilename()
                         if path:
-                            vpy.fileio.save_project(scene, path)
+                            vpy.ops.core.save_project(scene, path)
                             scene.is_saved = True
 
                 elif kmod(event.key, pygame.K_s, ctrl=True, shift=True):
                     path = asksaveasfilename()
                     if path:
-                        vpy.fileio.save_project(scene, path)
+                        vpy.ops.core.save_project(scene, path)
                         scene.is_saved = True
 
                 elif kmod(event.key, pygame.K_o, ctrl=True):
                     path = askopenfilename()
                     if path:
-                        scene = vpy.fileio.open_project(path)
+                        scene = vpy.ops.core.open_project(path)
                         scene.is_saved = True
 
         resized = False

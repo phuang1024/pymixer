@@ -18,7 +18,7 @@
 #
 
 import struct
-from . import types
+from .. import types
 
 UINT = "<I"
 SINT = "<i"
