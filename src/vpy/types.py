@@ -22,12 +22,24 @@ class Scene:
     is_saved: bool
     is_dirty: bool
     file_path: str
+    meta: bytes
 
     frame_start: int
     frame_end: int
     frame_step: int
+    fps: int
 
     def __init__(self, **kwargs) -> None:
+        self.is_saved = False
+        self.is_dirty = False
+        self.file_path = ""
+        self.meta = b""
+
+        self.frame_start = 0
+        self.frame_end = 600
+        self.frame_step = 1
+        self.fps = 30
+
         for key in kwargs:
             if hasattr(self, key):
                 setattr(self, key, kwargs[key])
