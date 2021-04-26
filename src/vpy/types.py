@@ -17,5 +17,17 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from . import fileio
-from . import types
+
+class Scene:
+    is_saved: bool
+    is_dirty: bool
+    file_path: str
+
+    frame_start: int
+    frame_end: int
+    frame_step: int
+
+    def __init__(self, **kwargs) -> None:
+        for key in kwargs:
+            if hasattr(self, key):
+                setattr(self, key, kwargs[key])
