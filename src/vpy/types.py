@@ -43,29 +43,29 @@ class Scene:
                 setattr(self, key, kwargs[key])
 
 
-class Context:
-    scene: Scene
-
-
 class Operator:
     label: str
     description: str
     idname: str
 
-    def poll(self, context: Context) -> bool:
+    def __call__(self, scene: Scene) -> str:
+        if self.poll(scene):
+            return self.execute(scene)
+        else:
+            return "CANCELLED"
+
+    def poll(self, scene: Scene) -> bool:
         """
-        The operator should return a bool based on the context,
-        specifying whether requirements, if any, are met (eg context.scene.fps >= 30)
+        The operator should return a bool based on the scene,
+        specifying whether requirements, if any, are met (eg scene.fps >= 30)
         """
         return True
 
-    def execute(self, context: Context) -> str:
+    def execute(self, scene: Scene) -> str:
         """
         This function is called when the operator is called,
         usually by the user pressing a button in the GUI.
         The return values of this function should be "FINISHED" or "CANCELLED"
-        :param context: The context during when the operator is executed.
-            You should use this instead of vpy.context because some things may change
-            after the operator is executed.
+        :param scene: The scene during when the operator is executed.
         """
         return "FINISHED"
