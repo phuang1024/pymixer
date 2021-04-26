@@ -17,7 +17,11 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+import struct
 from . import types
+
+UINT = "<I"
+SINT = "<i"
 
 
 def save_project(scene: types.Scene, path: str) -> None:
@@ -27,7 +31,14 @@ def save_project(scene: types.Scene, path: str) -> None:
     :param path: Path to save scene.
     """
     with open(path, "wb") as file:
-        file.write(b"test")
+        file.write(struct.pack(UINT, len(scene.meta)))
+        file.write(scene.meta)
+        file.write(bytes([scene.is_saved, scene.is_dirty]))
+
+        file.write(struct.pack(SINT, scene.frame_start))
+        file.write(struct.pack(SINT, scene.frame_end))
+        file.write(struct.pack(SINT, scene.frame_step))
+        file.write(struct.pack(UINT, scene.fps))
 
 
 def open_project(path: str) -> types.Scene:
@@ -35,5 +46,15 @@ def open_project(path: str) -> types.Scene:
     Opens binary file as a vpy.types.Scene
     :param path: Path to scene file.
     """
+    attrs = {}
     with open(path, "rb") as file:
-        return types.Scene()
+        attrs["meta"] = file.read(struct.unpack(UINT, file.read(4))[0])
+        attrs["is_saved"] = (file.read(1) == "\x01")
+        attrs["is_dirty"] = (file.read(1) == "\x01")
+
+        attrs["frame_start"] = struct.unpack(SINT, file.read(4))[0]
+        attrs["frame_end"] = struct.unpack(SINT, file.read(4))[0]
+        attrs["frame_step"] = struct.unpack(SINT, file.read(4))[0]
+        attrs["fps"] = struct.unpack(UINT, file.read(4))[0]
+
+    return types.Scene(**attrs)

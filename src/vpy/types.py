@@ -19,10 +19,9 @@
 
 
 class Scene:
+    meta: bytes
     is_saved: bool
     is_dirty: bool
-    file_path: str
-    meta: bytes
 
     frame_start: int
     frame_end: int
@@ -30,10 +29,9 @@ class Scene:
     fps: int
 
     def __init__(self, **kwargs) -> None:
+        self.meta = b""
         self.is_saved = False
         self.is_dirty = False
-        self.file_path = ""
-        self.meta = b""
 
         self.frame_start = 0
         self.frame_end = 600
