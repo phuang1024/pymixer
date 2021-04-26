@@ -18,8 +18,13 @@
 #
 
 import pygame
+import vpy
+from tkinter import Tk
+from tkinter.filedialog import asksaveasfilename
 from constants import *
+from utils import *
 pygame.init()
+Tk().withdraw()
 
 
 def main():
@@ -43,6 +48,14 @@ def main():
             elif event.type == pygame.VIDEORESIZE:
                 resized = True
                 width, height = event.w, event.h
+            elif event.type == pygame.KEYDOWN:
+                if kmod(event.key, pygame.K_q, ctrl=True):
+                    pygame.quit()
+                    return
+                elif kmod(event.key, pygame.K_s, ctrl=True):
+                    path = asksaveasfilename()
+                    if path:
+                        vpy.fileio.save_project(None, path)
 
         resized = False
 
