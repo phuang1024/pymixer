@@ -17,12 +17,23 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+from . import types
 
-def save_project(scene, path):
+
+def save_project(scene: types.Scene, path: str) -> None:
+    """
+    Saves scene as binary file.
+    :param scene: Scene to save. Save the current scene by passing vpy.context.scene
+    :param path: Path to save scene.
+    """
     with open(path, "wb") as file:
         file.write(b"test")
 
 
-def open_project(path):
+def open_project(path: str) -> types.Scene:
+    """
+    Opens binary file as a vpy.types.Scene
+    :param path: Path to scene file.
+    """
     with open(path, "rb") as file:
-        return None
+        return types.Scene()
