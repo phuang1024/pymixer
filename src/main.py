@@ -27,7 +27,7 @@ import pygame
 import vpy
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
-from utils import *
+from gui_utils import kmod
 from register import register
 pygame.init()
 Tk().withdraw()
@@ -55,9 +55,11 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 return
+
             elif event.type == pygame.VIDEORESIZE:
                 resized = True
                 width, height = event.w, event.h
+
             elif event.type == pygame.KEYDOWN:
                 if kmod(event.key, pygame.K_q, ctrl=True):
                     pygame.quit()
@@ -65,24 +67,24 @@ def main():
 
                 elif kmod(event.key, pygame.K_s, ctrl=True):
                     if scene.is_saved and path:
-                        vpy.ops.core.save_project(scene, path)
+                        vpy.ops.core.save_scene(scene, path=path)
                         scene.is_saved = True
                     else:
                         path = asksaveasfilename()
                         if path:
-                            vpy.ops.core.save_project(scene, path)
+                            vpy.ops.core.save_scene(scene, path=path)
                             scene.is_saved = True
 
                 elif kmod(event.key, pygame.K_s, ctrl=True, shift=True):
                     path = asksaveasfilename()
                     if path:
-                        vpy.ops.core.save_project(scene, path)
+                        vpy.ops.core.save_scene(scene, path=path)
                         scene.is_saved = True
 
                 elif kmod(event.key, pygame.K_o, ctrl=True):
                     path = askopenfilename()
                     if path:
-                        scene = vpy.ops.core.open_project(path)
+                        scene = vpy.ops.core.open_scene(path=path)
                         scene.is_saved = True
 
         resized = False
