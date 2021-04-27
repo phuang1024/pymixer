@@ -17,6 +17,11 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+import os
+
+PARENT = os.path.dirname(os.path.realpath(__file__))
+MODULE = os.path.join(PARENT, "vpy")
+
 INIT_WIDTH = 1280
 INIT_HEIGHT = 720
 FPS = 60

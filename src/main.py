@@ -17,11 +17,16 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+import sys
+import os
+from constants import *
+sys.path.insert(0, MODULE)
+os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
+
 import pygame
 import vpy
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
-from constants import *
 from utils import *
 pygame.init()
 Tk().withdraw()
