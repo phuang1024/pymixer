@@ -22,7 +22,8 @@ import os
 PARENT = os.path.dirname(os.path.realpath(__file__))
 MODULE_PATH = os.path.join(PARENT, "vpy")
 ADDON_PATHS = (
-    os.path.join(PARENT, "scripts"),
+    os.path.join(PARENT, "addons_builtin"),
+    os.path.join(PARENT, "addons_installed"),
 )
 
 INIT_WIDTH = 1280
