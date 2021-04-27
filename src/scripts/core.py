@@ -82,8 +82,7 @@ classes = (
 
 def register():
     for cls in classes:
-        # TODO register class
-        pass
+        vpy.utils.register_class(cls)
 
 def unregister():
     for cls in classes:
