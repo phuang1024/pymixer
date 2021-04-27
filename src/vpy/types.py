@@ -57,6 +57,14 @@ class Operator:
         else:
             return "CANCELLED"
 
+    def report(self, type: str, msg: str) -> None:
+        """
+        Sends a message to stdout, as of now.
+        :param type: INFO, WARNING, or ERROR.
+        :param msg: Message to send.
+        """
+        print(f"{type}: {msg}")
+
     def poll(self, scene: Scene, *args, **kwargs) -> bool:
         """
         The operator should return a bool based on the scene,

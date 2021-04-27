@@ -31,7 +31,10 @@ class CORE_OT_SaveScene(Operator):
     idname = "core.save_scene"
 
     def execute(self, scene: Scene, *args, **kwargs) -> str:
-        # TODO check if path in kwargs
+        if "path" not in kwargs:
+            self.report("ERROR", "Did not give path argument.")
+            return {"status": False}
+
         with open(kwargs["path"], "wb") as file:
             file.write(struct.pack(UINT, len(scene.meta)))
             file.write(scene.meta)
@@ -47,11 +50,14 @@ class CORE_OT_SaveScene(Operator):
 
 class CORE_OT_OpenScene(Operator):
     label = "Open Scene"
-    description = "Opens vinary file as a scene."
+    description = "Opens binary file as a scene."
     idname = "core.open_scene"
 
     def execute(self, scene: Scene, *args, **kwargs) -> str:
-        # TODO check if path in kwargs
+        if "path" not in kwargs:
+            self.report("ERROR", "Did not give path argument.")
+            return {"status": False}
+
         attrs = {}
         with open(kwargs["path"], "rb") as file:
             attrs["meta"] = file.read(struct.unpack(UINT, file.read(4))[0])
