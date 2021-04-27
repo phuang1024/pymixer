@@ -71,9 +71,11 @@ class Operator:
         """
         This function is called when the operator is called,
         usually by the user pressing a button in the GUI.
-        The return values of this function should be "FINISHED" or "CANCELLED"
+        The return should be a dictionary, which must have a key "status" with a
+            bool specifying whether this operator ran successfully.
+            The dictionary may contain other values as well.
         :param scene: The scene during when the operator is executed.
         :param args: Any other arguments the operator needs.
         :param kwargs: Any other arguments the operator needs.
         """
-        return "FINISHED"
+        return {"status": True}

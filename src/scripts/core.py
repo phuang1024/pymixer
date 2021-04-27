@@ -42,6 +42,8 @@ class CORE_OT_SaveScene(Operator):
             file.write(struct.pack(SINT, scene.frame_step))
             file.write(struct.pack(UINT, scene.fps))
 
+        return {"status": True}
+
 
 class CORE_OT_OpenScene(Operator):
     label = "Open Scene"
@@ -61,7 +63,10 @@ class CORE_OT_OpenScene(Operator):
             attrs["frame_step"] = struct.unpack(SINT, file.read(4))[0]
             attrs["fps"] = struct.unpack(UINT, file.read(4))[0]
 
-        return vpy.types.Scene(**attrs)
+        return {
+            "status": True,
+            "scene": vpy.types.Scene(**attrs),
+        }
 
 
 classes = (
