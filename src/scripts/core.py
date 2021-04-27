@@ -19,7 +19,7 @@
 
 import struct
 import vpy
-from vpy.types import Operator, Scene
+from vpy.types import Context, Operator, Scene
 
 UINT = "<I"
 SINT = "<i"
@@ -30,12 +30,14 @@ class CORE_OT_SaveScene(Operator):
     description = "Saves scene as a binary file."
     idname = "core.save_scene"
 
-    def execute(self, scene: Scene, *args, **kwargs) -> str:
+    def execute(self, context: Context, *args, **kwargs) -> str:
         if "path" not in kwargs:
             self.report("ERROR", "Did not give path argument.")
             return {"status": False}
 
         with open(kwargs["path"], "wb") as file:
+            scene = vpy.context.scene
+
             file.write(struct.pack(UINT, len(scene.meta)))
             file.write(scene.meta)
             file.write(bytes([scene.is_saved, scene.is_dirty]))
@@ -53,7 +55,7 @@ class CORE_OT_OpenScene(Operator):
     description = "Opens binary file as a scene."
     idname = "core.open_scene"
 
-    def execute(self, scene: Scene, *args, **kwargs) -> str:
+    def execute(self, context: Context, *args, **kwargs) -> str:
         if "path" not in kwargs:
             self.report("ERROR", "Did not give path argument.")
             return {"status": False}
@@ -69,10 +71,8 @@ class CORE_OT_OpenScene(Operator):
             attrs["frame_step"] = struct.unpack(SINT, file.read(4))[0]
             attrs["fps"] = struct.unpack(UINT, file.read(4))[0]
 
-        return {
-            "status": True,
-            "scene": vpy.types.Scene(**attrs),
-        }
+        vpy.context.scene = Scene(**attrs)
+        return "FINISHED"
 
 
 classes = (

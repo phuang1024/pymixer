@@ -50,6 +50,18 @@ class Scene:
                 setattr(self, key, kwargs[key])
 
 
+class Context:
+    """
+    Context containing current info in GUI, such as current loaded scene.
+    Will be initialized and updated by GUI.
+    """
+
+    scene: Scene
+
+    def __init__(self) -> None:
+        pass
+
+
 class Operator:
     """
     Operator class. Displayed as a button in the GUI.
@@ -61,12 +73,15 @@ class Operator:
     description: str
     idname: str
 
-    def __call__(self, scene: Scene, *args, **kwargs) -> str:
+    def __call__(self, *args, **kwargs) -> str:
         """
-        Same as op.execute(), but shorter to write.
+        Passes vpy.context to all methods that need it.
+        First checks poll(). If it is successfull, then run execute()
         """
-        if self.poll(scene, *args, **kwargs):
-            return self.execute(scene, *args, **kwargs)
+        import vpy
+
+        if self.poll(vpy.context, *args, **kwargs):
+            return self.execute(vpy.context, *args, **kwargs)
         else:
             return "CANCELLED"
 
@@ -78,24 +93,24 @@ class Operator:
         """
         print(f"{type}: {msg}")
 
-    def poll(self, scene: Scene, *args, **kwargs) -> bool:
+    def poll(self, context: Context, *args, **kwargs) -> bool:
         """
         The operator should return a bool based on the scene,
         specifying whether requirements, if any, are met (eg scene.fps >= 30)
-        :param scene: The scene during when the operator is executed.
+        :param context: Context during which the operator is executed.
         :param args: Any other arguments the operator needs.
         :param kwargs: Any other arguments the operator needs.
         """
         return True
 
-    def execute(self, scene: Scene, *args, **kwargs) -> str:
+    def execute(self, context: Context, *args, **kwargs) -> str:
         """
         This function is run when the operator is called,
         usually by the user pressing a button in the GUI.
         The return should be a dictionary, which must have a key "status" with a
             bool specifying whether this operator ran successfully.
             The dictionary may contain other values as well.
-        :param scene: The scene during when the operator is executed.
+        :param context: Context during which the operator is executed.
         :param args: Any other arguments the operator needs.
         :param kwargs: Any other arguments the operator needs.
         """
@@ -136,15 +151,3 @@ class OpsModule:
             return self.colls[attr]
         else:
             raise AttributeError(f"OpsModule has no attribute {attr}")
-
-
-class Context:
-    """
-    Context containing current info in GUI, such as current loaded scene.
-    Will be initialized and updated by GUI.
-    """
-
-    scene: Scene
-
-    def __init__(self) -> None:
-        pass

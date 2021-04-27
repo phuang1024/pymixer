@@ -36,7 +36,7 @@ Tk().withdraw()
 def main():
     register(ADDON_PATHS)
 
-    scene = vpy.types.Scene()
+    vpy.context.scene = vpy.types.Scene()
     path = ""
 
     pygame.display.set_caption("Video Editor")
@@ -66,26 +66,26 @@ def main():
                     return
 
                 elif kmod(event.key, pygame.K_s, ctrl=True):
-                    if scene.is_saved and path:
-                        vpy.ops.core.save_scene(scene, path=path)
-                        scene.is_saved = True
+                    if vpy.context.scene.is_saved and path:
+                        vpy.ops.core.save_scene(path=path)
+                        vpy.context.scene.is_saved = True
                     else:
                         path = asksaveasfilename()
                         if path:
-                            vpy.ops.core.save_scene(scene, path=path)
-                            scene.is_saved = True
+                            vpy.ops.core.save_scene(path=path)
+                            vpy.context.scene.is_saved = True
 
                 elif kmod(event.key, pygame.K_s, ctrl=True, shift=True):
                     path = asksaveasfilename()
                     if path:
-                        vpy.ops.core.save_scene(scene, path=path)
-                        scene.is_saved = True
+                        vpy.ops.core.save_scene(path=path)
+                        vpy.context.scene.is_saved = True
 
                 elif kmod(event.key, pygame.K_o, ctrl=True):
                     path = askopenfilename()
                     if path:
-                        scene = vpy.ops.core.open_scene(path=path)
-                        scene.is_saved = True
+                        vpy.ops.core.open_scene(path=path)
+                        vpy.context.scene.is_saved = True
 
         resized = False
 
