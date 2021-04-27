@@ -19,42 +19,62 @@
 
 import struct
 import vpy
+from vpy.types import Operator, Scene
 
 UINT = "<I"
 SINT = "<i"
 
 
-def save_project(scene: vpy.types.Scene, path: str) -> None:
-    """
-    Saves scene as binary file.
-    :param scene: Scene to save. Save the current scene by passing vpy.context.scene
-    :param path: Path to save scene.
-    """
-    with open(path, "wb") as file:
-        file.write(struct.pack(UINT, len(scene.meta)))
-        file.write(scene.meta)
-        file.write(bytes([scene.is_saved, scene.is_dirty]))
+class CORE_OT_SaveScene(Operator):
+    label = "Save Scene"
+    description = "Saves scene as a binary file."
+    idname = "core.save_scene"
 
-        file.write(struct.pack(SINT, scene.frame_start))
-        file.write(struct.pack(SINT, scene.frame_end))
-        file.write(struct.pack(SINT, scene.frame_step))
-        file.write(struct.pack(UINT, scene.fps))
+    def execute(self, scene: Scene, *args, **kwargs) -> str:
+        # TODO check if path in kwargs
+        with open(kwargs["path"], "wb") as file:
+            file.write(struct.pack(UINT, len(scene.meta)))
+            file.write(scene.meta)
+            file.write(bytes([scene.is_saved, scene.is_dirty]))
+
+            file.write(struct.pack(SINT, scene.frame_start))
+            file.write(struct.pack(SINT, scene.frame_end))
+            file.write(struct.pack(SINT, scene.frame_step))
+            file.write(struct.pack(UINT, scene.fps))
 
 
-def open_project(path: str) -> vpy.types.Scene:
-    """
-    Opens binary file as a vpy.types.Scene
-    :param path: Path to scene file.
-    """
-    attrs = {}
-    with open(path, "rb") as file:
-        attrs["meta"] = file.read(struct.unpack(UINT, file.read(4))[0])
-        attrs["is_saved"] = (file.read(1) == "\x01")
-        attrs["is_dirty"] = (file.read(1) == "\x01")
+class CORE_OT_OpenScene(Operator):
+    label = "Open Scene"
+    description = "Opens vinary file as a scene."
+    idname = "core.open_scene"
 
-        attrs["frame_start"] = struct.unpack(SINT, file.read(4))[0]
-        attrs["frame_end"] = struct.unpack(SINT, file.read(4))[0]
-        attrs["frame_step"] = struct.unpack(SINT, file.read(4))[0]
-        attrs["fps"] = struct.unpack(UINT, file.read(4))[0]
+    def execute(self, scene: Scene, *args, **kwargs) -> str:
+        # TODO check if path in kwargs
+        attrs = {}
+        with open(kwargs["path"], "rb") as file:
+            attrs["meta"] = file.read(struct.unpack(UINT, file.read(4))[0])
+            attrs["is_saved"] = (file.read(1) == "\x01")
+            attrs["is_dirty"] = (file.read(1) == "\x01")
 
-    return vpy.types.Scene(**attrs)
+            attrs["frame_start"] = struct.unpack(SINT, file.read(4))[0]
+            attrs["frame_end"] = struct.unpack(SINT, file.read(4))[0]
+            attrs["frame_step"] = struct.unpack(SINT, file.read(4))[0]
+            attrs["fps"] = struct.unpack(UINT, file.read(4))[0]
+
+        return vpy.types.Scene(**attrs)
+
+
+classes = (
+    CORE_OT_SaveScene,
+    CORE_OT_OpenScene,
+)
+
+def register():
+    for cls in classes:
+        # TODO register class
+        pass
+
+def unregister():
+    for cls in classes:
+        # TODO unregister class
+        pass
