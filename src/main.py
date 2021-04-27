@@ -33,7 +33,7 @@ pygame.init()
 Tk().withdraw()
 
 
-def main():
+def gui():
     register(ADDON_PATHS)
 
     vpy.context.scene = vpy.types.Scene()
@@ -91,6 +91,25 @@ def main():
             surface.fill(BLACK)
 
         resized = False
+
+
+def addon_manager():
+    pass
+
+
+def main():
+    if len(sys.argv) >= 2:
+        if sys.argv[1] in ("--help", "-h"):
+            print("Video Editor - GNU GPL 3 license")
+            print("Usage:")
+            print("  -h, --help             Show this help menu")
+            print("  -a, --addon-manager    Open the CLI addon manager")
+
+        elif sys.argv[1] in ("-a", "--addon-manager"):
+            addon_manager()
+
+    else:
+        gui()
 
 
 main()
