@@ -17,7 +17,8 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-
+import time
+from datetime import datetime
 from typing import Dict
 
 
@@ -27,27 +28,17 @@ class Scene:
     """
 
     meta: bytes
+    time: float
+    date: bytes
     is_saved: bool
     is_dirty: bool
 
-    frame_start: int
-    frame_end: int
-    frame_step: int
-    fps: int
-
-    def __init__(self, **kwargs) -> None:
+    def __init__(self) -> None:
         self.meta = b""
+        self.time = time.time()
+        self.date = datetime.now().strftime("%Y-%m-%d %H-%M-%S").encode()
         self.is_saved = False
         self.is_dirty = False
-
-        self.frame_start = 0
-        self.frame_end = 600
-        self.frame_step = 1
-        self.fps = 30
-
-        for key in kwargs:
-            if hasattr(self, key):
-                setattr(self, key, kwargs[key])
 
 
 class Context:

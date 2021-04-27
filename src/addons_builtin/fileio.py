@@ -21,8 +21,9 @@ import struct
 import vpy
 from vpy.types import Context, Operator, Scene
 
-UINT = "<I"
-SINT = "<i"
+UINT =   "<I"
+SINT =   "<i"
+DOUBLE = "d"
 
 
 class CORE_OT_SaveScene(Operator):
@@ -40,12 +41,10 @@ class CORE_OT_SaveScene(Operator):
 
             file.write(struct.pack(UINT, len(scene.meta)))
             file.write(scene.meta)
+            file.write(struct.pack(DOUBLE, scene.time))
+            file.write(struct.pack(UINT, len(scene.date)))
+            file.write(scene.date)
             file.write(bytes([scene.is_saved, scene.is_dirty]))
-
-            file.write(struct.pack(SINT, scene.frame_start))
-            file.write(struct.pack(SINT, scene.frame_end))
-            file.write(struct.pack(SINT, scene.frame_step))
-            file.write(struct.pack(UINT, scene.fps))
 
         return {"status": True}
 
@@ -60,18 +59,15 @@ class CORE_OT_OpenScene(Operator):
             self.report("ERROR", "Did not give path argument.")
             return {"status": False}
 
-        attrs = {}
+        scene = Scene()
         with open(kwargs["path"], "rb") as file:
-            attrs["meta"] = file.read(struct.unpack(UINT, file.read(4))[0])
-            attrs["is_saved"] = (file.read(1) == "\x01")
-            attrs["is_dirty"] = (file.read(1) == "\x01")
+            scene.meta = file.read(struct.unpack(UINT, file.read(4))[0])
+            scene.time = struct.unpack(DOUBLE, file.read(8))[0]
+            scene.date = file.read(struct.unpack(UINT, file.read(4))[0])
+            scene.is_saved = (file.read(1) == "\x01")
+            scene.is_dirty = (file.read(1) == "\x01")
 
-            attrs["frame_start"] = struct.unpack(SINT, file.read(4))[0]
-            attrs["frame_end"] = struct.unpack(SINT, file.read(4))[0]
-            attrs["frame_step"] = struct.unpack(SINT, file.read(4))[0]
-            attrs["fps"] = struct.unpack(UINT, file.read(4))[0]
-
-        vpy.context.scene = Scene(**attrs)
+        vpy.context.scene = scene
         return "FINISHED"
 
 
