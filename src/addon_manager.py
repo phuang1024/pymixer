@@ -17,30 +17,9 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-import sys
 import os
 from constants import *
 
-sys.path.insert(0, MODULE_PATH)
-os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 
-from gui import gui
-from addon_manager import addon_manager
-
-
-def main():
-    if len(sys.argv) >= 2:
-        if sys.argv[1] in ("--help", "-h"):
-            print("Video Editor - GNU GPL 3 license")
-            print("Usage:")
-            print("  -h, --help             Show this help menu")
-            print("  -a, --addon-manager    Open the CLI addon manager")
-
-        elif sys.argv[1] in ("-a", "--addon-manager"):
-            addon_manager()
-
-    else:
-        gui()
-
-
-main()
+def addon_manager():
+    pass
