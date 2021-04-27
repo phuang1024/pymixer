@@ -18,13 +18,13 @@
 #
 
 import struct
-from .. import types
+import vpy
 
 UINT = "<I"
 SINT = "<i"
 
 
-def save_project(scene: types.Scene, path: str) -> None:
+def save_project(scene: vpy.types.Scene, path: str) -> None:
     """
     Saves scene as binary file.
     :param scene: Scene to save. Save the current scene by passing vpy.context.scene
@@ -41,7 +41,7 @@ def save_project(scene: types.Scene, path: str) -> None:
         file.write(struct.pack(UINT, scene.fps))
 
 
-def open_project(path: str) -> types.Scene:
+def open_project(path: str) -> vpy.types.Scene:
     """
     Opens binary file as a vpy.types.Scene
     :param path: Path to scene file.
@@ -57,4 +57,4 @@ def open_project(path: str) -> types.Scene:
         attrs["frame_step"] = struct.unpack(SINT, file.read(4))[0]
         attrs["fps"] = struct.unpack(UINT, file.read(4))[0]
 
-    return types.Scene(**attrs)
+    return vpy.types.Scene(**attrs)
