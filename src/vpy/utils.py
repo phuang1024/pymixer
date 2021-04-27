@@ -17,7 +17,17 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from . import types
-from . import utils
 
-ops = types.OpsModule()
+def register_class(cls):
+    import vpy
+
+    if isinstance(cls, vpy.types.Operator):
+        group, name = cls.idname.split(".")
+        if not hasattr(vpy.ops, group):
+            vpy.ops.colls[group] = vpy.types.OpCollection()
+        coll = getattr(vpy.ops, group)
+        if not hasattr(coll, name):
+            coll.operators[name] = cls
+
+    else:
+        raise ValueError("Class to register must inherit from Operator")
