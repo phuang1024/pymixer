@@ -87,6 +87,9 @@ def main():
                         vpy.ops.core.open_scene(path=path)
                         vpy.context.scene.is_saved = True
 
+        if resized:
+            surface.fill(BLACK)
+
         resized = False
 
 

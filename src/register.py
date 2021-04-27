@@ -24,12 +24,16 @@ import importlib
 
 def register(dirs):
     for d in dirs:
-        sys.path.append(d)
-        for f in os.listdir(d):
-            try:
-                mod = importlib.import_module(os.path.splitext(f)[0])
-                mod.register()
-            except AttributeError:   # Tried to import __pycache__
-                pass
+        if os.path.isdir(d):
+            sys.path.append(d)
+            for f in os.listdir(d):
+                register_module(f)
+            sys.path.pop()
 
-        sys.path.pop()
+
+def register_module(file):
+    try:
+        mod = importlib.import_module(os.path.splitext(file)[0])
+        mod.register()
+    except AttributeError:   # Tried to import __pycache__
+        pass
