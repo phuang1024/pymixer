@@ -48,24 +48,32 @@ class Operator:
     description: str
     idname: str
 
-    def __call__(self, scene: Scene) -> str:
-        if self.poll(scene):
-            return self.execute(scene)
+    def __call__(self, scene: Scene, *args, **kwargs) -> str:
+        """
+        Same as op.execute(), but shorter to write.
+        """
+        if self.poll(scene, *args, **kwargs):
+            return self.execute(scene, *args, **kwargs)
         else:
             return "CANCELLED"
 
-    def poll(self, scene: Scene) -> bool:
+    def poll(self, scene: Scene, *args, **kwargs) -> bool:
         """
         The operator should return a bool based on the scene,
         specifying whether requirements, if any, are met (eg scene.fps >= 30)
+        :param scene: The scene during when the operator is executed.
+        :param args: Any other arguments the operator needs.
+        :param kwargs: Any other arguments the operator needs.
         """
         return True
 
-    def execute(self, scene: Scene) -> str:
+    def execute(self, scene: Scene, *args, **kwargs) -> str:
         """
         This function is called when the operator is called,
         usually by the user pressing a button in the GUI.
         The return values of this function should be "FINISHED" or "CANCELLED"
         :param scene: The scene during when the operator is executed.
+        :param args: Any other arguments the operator needs.
+        :param kwargs: Any other arguments the operator needs.
         """
         return "FINISHED"
