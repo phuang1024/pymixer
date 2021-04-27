@@ -136,3 +136,15 @@ class OpsModule:
             return self.colls[attr]
         else:
             raise AttributeError(f"OpsModule has no attribute {attr}")
+
+
+class Context:
+    """
+    Context containing current info in GUI, such as current loaded scene.
+    Will be initialized and updated by GUI.
+    """
+
+    scene: Scene
+
+    def __init__(self) -> None:
+        pass
