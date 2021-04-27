@@ -17,17 +17,19 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+import sys
 import os
+import importlib
 
-PARENT = os.path.dirname(os.path.realpath(__file__))
-MODULE_PATH = os.path.join(PARENT, "vpy")
-ADDON_PATHS = (
-    os.path.join(PARENT, "scripts"),
-)
 
-INIT_WIDTH = 1280
-INIT_HEIGHT = 720
-FPS = 60
+def register(dirs):
+    for d in dirs:
+        sys.path.append(d)
+        for f in os.listdir(d):
+            try:
+                mod = importlib.import_module(os.path.splitext(f)[0])
+                mod.register()
+            except AttributeError:   # Tried to import __pycache__
+                pass
 
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
+        sys.path.pop()

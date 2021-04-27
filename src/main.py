@@ -20,7 +20,7 @@
 import sys
 import os
 from constants import *
-sys.path.insert(0, MODULE)
+sys.path.insert(0, MODULE_PATH)
 os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 
 import pygame
@@ -28,22 +28,24 @@ import vpy
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 from utils import *
+from register import register
 pygame.init()
 Tk().withdraw()
 
 
 def main():
-    pygame.display.set_caption("Video Editor")
-    surface = pygame.display.set_mode((INIT_WIDTH, INIT_HEIGHT), pygame.RESIZABLE)
-    surface.fill(BLACK)
-
-    clock = pygame.time.Clock()
-
-    resized = False
-    width, height = INIT_WIDTH, INIT_HEIGHT
+    register(ADDON_PATHS)
 
     scene = vpy.types.Scene()
     path = ""
+
+    pygame.display.set_caption("Video Editor")
+    clock = pygame.time.Clock()
+    surface = pygame.display.set_mode((INIT_WIDTH, INIT_HEIGHT), pygame.RESIZABLE)
+    surface.fill(BLACK)
+
+    resized = False
+    width, height = INIT_WIDTH, INIT_HEIGHT
 
     while True:
         clock.tick(FPS)
