@@ -22,6 +22,10 @@ from typing import Dict
 
 
 class Scene:
+    """
+    Scene class. This is saved and loaded from the project file.
+    """
+
     meta: bytes
     is_saved: bool
     is_dirty: bool
@@ -47,6 +51,12 @@ class Scene:
 
 
 class Operator:
+    """
+    Operator class. Displayed as a button in the GUI.
+    To create an operator, create a new class that inherits from this.
+    Then, you can define your own execute method, which will be run when the operator is called.
+    """
+
     label: str
     description: str
     idname: str
@@ -93,6 +103,11 @@ class Operator:
 
 
 class OpCollection:
+    """
+    A collection of operators, found in vpy.ops.my_collection
+    Add operators by calling vpy.utils.register_class(MyOperatorClass)
+    """
+
     operators: Dict[str, Operator]
 
     def __init__(self) -> None:
@@ -106,6 +121,11 @@ class OpCollection:
 
 
 class OpsModule:
+    """
+    The vpy.ops module.
+    Operator collections are automatically added from vpy.utils.register_class()
+    """
+
     colls: Dict[str, OpCollection]
 
     def __init__(self) -> None:
