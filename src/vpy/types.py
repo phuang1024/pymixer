@@ -18,6 +18,9 @@
 #
 
 
+from typing import Dict
+
+
 class Scene:
     meta: bytes
     is_saved: bool
@@ -77,7 +80,7 @@ class Operator:
 
     def execute(self, scene: Scene, *args, **kwargs) -> str:
         """
-        This function is called when the operator is called,
+        This function is run when the operator is called,
         usually by the user pressing a button in the GUI.
         The return should be a dictionary, which must have a key "status" with a
             bool specifying whether this operator ran successfully.
@@ -87,3 +90,29 @@ class Operator:
         :param kwargs: Any other arguments the operator needs.
         """
         return {"status": True}
+
+
+class OpCollection:
+    operators: Dict[str, Operator]
+
+    def __init__(self) -> None:
+        self.operators = {}
+
+    def __getattr__(self, attr) -> Operator:
+        if attr in self.operators:
+            return self.operators[attr]
+        else:
+            raise AttributeError(f"OpCollection has no attribute {attr}")
+
+
+class OpsModule:
+    colls: Dict[str, OpCollection]
+
+    def __init__(self) -> None:
+        self.colls = {}
+
+    def __getattr__(self, attr) -> OpCollection:
+        if attr in self.colls:
+            return self.colls[attr]
+        else:
+            raise AttributeError(f"OpsModule has no attribute {attr}")
