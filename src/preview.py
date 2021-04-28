@@ -64,6 +64,11 @@ class Preview:
                 elif event.button == 5:
                     self.size /= 1.08
 
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_HOME and not self.dragging:
+                    self.loc = [0, 0]
+                    self.size = 540
+
         self.dragging = shared.mouse_pressed[1]
         if self.dragging:
             # Set new location
