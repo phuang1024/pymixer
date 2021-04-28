@@ -82,5 +82,4 @@ def register():
 
 def unregister():
     for cls in classes:
-        # TODO unregister class
-        pass
+        vpy.utils.unregister_class(cls)

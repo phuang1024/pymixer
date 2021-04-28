@@ -58,3 +58,7 @@ def register_class(cls):
 
     else:
         raise ValueError("Class to register must inherit from Operator")
+
+
+def unregister_class(cls):
+    import vpy
