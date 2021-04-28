@@ -33,20 +33,33 @@ class Preview:
         self.loc = [0, 0]
 
     def draw(self, surface, events, loc, size):
-        surf = pygame.Surface(size, pygame.SRCALPHA)
-        x_center = loc[0] + size[0]/2
-        y_center = loc[1] + size[1]/2
+        update = False
+        for event in events:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                update = True
+                if event.button == 4:
+                    self.size *= 1.08
+                elif event.button == 5:
+                    self.size /= 1.08
 
-        width = self.size
-        height = width / vpy.context.scene.output.x_res.get() * vpy.context.scene.output.y_res.get()
-        x = x_center + self.loc[0] - width/2
-        y = y_center + self.loc[1] - height/2
+        if update or size != self.prev_size or loc != self.prev_loc:
+            pygame.draw.rect(surface, BLACK, (*loc, *size))
 
-        draw_dashed_line(surface, (x, y), (x+width, y), 6, GRAY, 1)
-        draw_dashed_line(surface, (x, y+height), (x+width, y+height), 6, GRAY, 1)
-        draw_dashed_line(surface, (x, y), (x, y+height), 6, GRAY, 1)
-        draw_dashed_line(surface, (x+width, y), (x+width, y+height), 6, GRAY, 1)
+            surf = pygame.Surface(size, pygame.SRCALPHA)
+            x_center = loc[0] + size[0]/2
+            y_center = loc[1] + size[1]/2
 
-        surface.blit(surf, loc)
+            width = self.size
+            height = width / vpy.context.scene.output.x_res.get() * vpy.context.scene.output.y_res.get()
+            x = x_center + self.loc[0] - width/2
+            y = y_center + self.loc[1] - height/2
+
+            draw_dashed_line(surf, (x, y), (x+width, y), 6, GRAY, 1)
+            draw_dashed_line(surf, (x, y+height), (x+width, y+height), 6, GRAY, 1)
+            draw_dashed_line(surf, (x, y), (x, y+height), 6, GRAY, 1)
+            draw_dashed_line(surf, (x+width, y), (x+width, y+height), 6, GRAY, 1)
+
+            surface.blit(surf, loc)
+
         self.prev_size = size
         self.prev_loc = loc
