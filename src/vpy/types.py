@@ -32,6 +32,9 @@ class OpsModule: pass
 class Property: pass
 class BoolProp: pass
 class IntProp: pass
+class FloatProp: pass
+class StringProp: pass
+class EnumProp: pass
 class PropertyGroup: pass
 class PropCollection: pass
 
@@ -128,7 +131,6 @@ class Operator:
         """
         return {"status": True}
 
-
 class OpCollection:
     """
     A collection of operators, found in vpy.ops.my_collection
@@ -145,7 +147,6 @@ class OpCollection:
             return self.operators[attr]
         else:
             raise AttributeError(f"OpCollection has no attribute {attr}")
-
 
 class OpsModule:
     """
@@ -183,7 +184,6 @@ class Property:
     def set(self, value: type) -> None:
         self.value = value
 
-
 class BoolProp(Property):
     """
     Boolean property.
@@ -197,7 +197,6 @@ class BoolProp(Property):
         self.default = default
 
         self.value = default
-
 
 class IntProp(Property):
     """
@@ -224,7 +223,6 @@ class IntProp(Property):
             value = self.max
         self.value = value
 
-
 class FloatProp(Property):
     """
     Float property.
@@ -250,7 +248,6 @@ class FloatProp(Property):
             value = self.max
         self.value = value
 
-
 class StringProp(Property):
     """
     String property.
@@ -264,7 +261,6 @@ class StringProp(Property):
         self.default = default
 
         self.value = default
-
 
 class EnumProp(Property):
     """
@@ -287,7 +283,6 @@ class EnumProp(Property):
     def set(self, idx: int) -> None:
         self.idx = min(idx, len(self.items)-1)
 
-
 class PropertyGroup:
     """
     Group of props.
@@ -295,7 +290,6 @@ class PropertyGroup:
     """
 
     idname: str
-
 
 class PropCollection:
     """
