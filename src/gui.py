@@ -19,6 +19,7 @@
 
 import pygame
 import vpy
+import shared
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 from constants import *
@@ -32,7 +33,7 @@ class WindowManager:
     def __init__(self):
         self.preview = Preview()
 
-    def draw(self, surface, events):
+    def draw(self, surface):
         width, height = surface.get_size()
         x_sep = width * 0.8
         y_sep = height * 0.5
@@ -40,7 +41,7 @@ class WindowManager:
         # Preview
         loc = (0, 0)
         size = (x_sep, y_sep)
-        self.preview.draw(surface, events, loc, size)
+        self.preview.draw(surface, loc, size)
 
         # Window separating grid
         pygame.draw.line(surface, GRAY_DARK, (0, y_sep), (x_sep, y_sep), 2)
@@ -101,8 +102,14 @@ def gui():
                         vpy.ops.core.open_scene(path=path)
                         vpy.context.scene.is_saved = True
 
+        # Set constants to minimize pygame calls
+        shared.mouse_pos = pygame.mouse.get_pos()
+        shared.mouse_pressed = pygame.mouse.get_pressed()
+        shared.keys_pressed = pygame.key.get_pressed()
+        shared.events = events
+
         if resized:
             surface.fill(BLACK)
-        wm.draw(surface, events)
+        wm.draw(surface)
 
         resized = False

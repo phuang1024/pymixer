@@ -19,6 +19,7 @@
 
 import pygame
 import vpy
+import shared
 from copy import deepcopy
 from constants import *
 from gui_utils import draw_dashed_line
@@ -32,28 +33,26 @@ class Preview:
         self.size = 540
         self.loc = [0, 0]
 
-        self.dragging = False
-        self.drag_start_pos = None
-        self.drag_start_loc = None
+        self.dragging = False         # Whether currently dragging
+        self.drag_start_pos = None    # Mouse position at start of drag
+        self.drag_start_loc = None    # Preview position at start of drag
 
-    def draw(self, surface, events, loc, size):
-        pos = pygame.mouse.get_pos()
-        for event in events:
+    def draw(self, surface, loc, size):
+        for event in shared.events:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 2:
-                    self.drag_start_pos = pos
+                    self.drag_start_pos = shared.mouse_pos
                     self.drag_start_loc = self.loc[:]
                 elif event.button == 4:
                     self.size *= 1.08
                 elif event.button == 5:
                     self.size /= 1.08
 
-        mouse = pygame.mouse.get_pressed()
-        self.dragging = mouse[1]
+        self.dragging = shared.mouse_pressed[1]
         if self.dragging:
             self.loc = [
-                pos[0] - self.drag_start_pos[0] + self.drag_start_loc[0],
-                pos[1] - self.drag_start_pos[1] + self.drag_start_loc[1],
+                shared.mouse_pos[0] - self.drag_start_pos[0] + self.drag_start_loc[0],
+                shared.mouse_pos[1] - self.drag_start_pos[1] + self.drag_start_loc[1],
             ]
 
         pygame.draw.rect(surface, BLACK, (*loc, *size))
