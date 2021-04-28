@@ -23,8 +23,28 @@ from tkinter import Tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 from constants import *
 from gui_utils import kmod, setup_api
+from preview import Preview
 pygame.init()
 Tk().withdraw()
+
+
+class WindowManager:
+    def __init__(self):
+        self.preview = Preview()
+
+    def draw(self, surface, events):
+        width, height = surface.get_size()
+        x_sep = width * 0.8
+        y_sep = height * 0.5
+
+        # Preview
+        loc = (0, 0)
+        size = (x_sep, y_sep)
+        self.preview.draw(surface, events, loc, size)
+
+        # Window separating grid
+        pygame.draw.line(surface, GRAY_DARK, (0, y_sep), (x_sep, y_sep), 2)
+        pygame.draw.line(surface, GRAY_DARK, (x_sep, 0), (x_sep, height), 2)
 
 
 def gui():
@@ -38,6 +58,8 @@ def gui():
 
     resized = False
     width, height = INIT_WIDTH, INIT_HEIGHT
+
+    wm = WindowManager()
 
     while True:
         clock.tick(FPS)
@@ -81,5 +103,6 @@ def gui():
 
         if resized:
             surface.fill(BLACK)
+        wm.draw(surface, events)
 
         resized = False
