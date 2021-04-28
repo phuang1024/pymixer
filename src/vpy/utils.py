@@ -38,6 +38,9 @@ def register_class(cls) -> None:
     import vpy
 
     if issubclass(cls, vpy.types.Operator):
+        if not cls.idname.count(".") == 1:
+            raise ValueError("Operator idname must have exactly 1 \".\"")
+
         group, name = cls.idname.split(".")
         if not hasattr(vpy.ops, group):
             vpy.ops.colls[group] = vpy.types.OpCollection()
@@ -46,6 +49,9 @@ def register_class(cls) -> None:
             coll.operators[name] = cls()
 
     elif issubclass(cls, vpy.types.PropertyGroup):
+        if not cls.idname.count(".") == 0:
+            raise ValueError("PropertyGroup idname must not have a dot.")
+
         coll = vpy.types.PropCollection()
         for attr in cls.__dict__:
             if not attr.startswith("__") and attr != "idname":
