@@ -19,8 +19,8 @@
 
 import time
 import numpy as np
+from typing import Any, Dict, Tuple
 from datetime import datetime
-from typing import Any, Dict
 
 
 # Class "declaration" needed for type hinting.
@@ -208,12 +208,12 @@ class IntProp(Property):
     min: type
     max: type
 
-    def __init__(self, name: str = "", description: str = "", default: type = 0, min: type = 0, max: type = 10) -> None:
+    def __init__(self, name: str = "", description: str = "", default: type = 0, min: type = None, max: type = None) -> None:
         self.name = name
         self.description = description
         self.default = default
-        self.min = min
-        self.max = max
+        self.min = float("-inf") if min is None else min
+        self.max = float("inf") if max is None else max
 
         self.value = default
 
@@ -223,6 +223,69 @@ class IntProp(Property):
         if value > self.max:
             value = self.max
         self.value = value
+
+
+class FloatProp(Property):
+    """
+    Float property.
+    """
+
+    type = float
+    min: type
+    max: type
+
+    def __init__(self, name: str = "", description: str = "", default: type = 0, min: type = None, max: type = None) -> None:
+        self.name = name
+        self.description = description
+        self.default = default
+        self.min = float("-inf") if min is None else min
+        self.max = float("inf") if max is None else max
+
+        self.value = default
+
+    def set(self, value: type) -> None:
+        if value < self.min:
+            value = self.min
+        if value > self.max:
+            value = self.max
+        self.value = value
+
+
+class StringProp(Property):
+    """
+    String property.
+    """
+
+    type = str
+
+    def __init__(self, name: str = "", description: str = "", default: type = 0) -> None:
+        self.name = name
+        self.description = description
+        self.default = default
+
+        self.value = default
+
+
+class EnumProp(Property):
+    """
+    Enumerate property.
+    """
+
+    type = Tuple
+    items: Tuple[Tuple[str]]
+    idx: int
+
+    def __init__(self, name: str = "", description: str = "", items: Tuple[Tuple[str]] = ()) -> None:
+        self.name = name
+        self.description = description
+        self.items = items
+        self.idx = 0
+
+    def get(self) -> str:
+        return self.items[self.idx][0]
+
+    def set(self, idx: int) -> None:
+        self.idx = min(idx, len(self.items)-1)
 
 
 class PropertyGroup:
