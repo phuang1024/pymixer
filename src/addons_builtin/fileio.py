@@ -34,7 +34,7 @@ class CORE_OT_SaveScene(Operator):
     def execute(self, context: Context, *args, **kwargs) -> str:
         if "path" not in kwargs:
             self.report("ERROR", "Did not give path argument.")
-            return {"status": False}
+            return "CANCELLED"
 
         with open(kwargs["path"], "wb") as file:
             scene = vpy.context.scene
@@ -46,7 +46,7 @@ class CORE_OT_SaveScene(Operator):
             file.write(scene.date)
             file.write(bytes([scene.is_saved, scene.is_dirty]))
 
-        return {"status": True}
+        return "FINISHED"
 
 
 class CORE_OT_OpenScene(Operator):
@@ -57,7 +57,7 @@ class CORE_OT_OpenScene(Operator):
     def execute(self, context: Context, *args, **kwargs) -> str:
         if "path" not in kwargs:
             self.report("ERROR", "Did not give path argument.")
-            return {"status": False}
+            return "CANCELLED"
 
         scene = Scene()
         with open(kwargs["path"], "rb") as file:
