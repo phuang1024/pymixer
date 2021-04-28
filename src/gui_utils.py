@@ -17,8 +17,18 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+import sys
+import os
+import importlib
 import pygame
+import vpy
+from constants import *
 pygame.init()
+
+
+def setup_api():
+    register(ADDON_PATHS)
+    vpy.context.scene = vpy.types.Scene()
 
 
 def kmod(key, target_key, ctrl=False, shift=False, alt=False):
@@ -38,3 +48,20 @@ def kmod(key, target_key, ctrl=False, shift=False, alt=False):
     if meets_requires and key == target_key:
         return True
     return False
+
+
+def register(dirs):
+    for d in dirs:
+        if os.path.isdir(d):
+            sys.path.append(d)
+            for f in os.listdir(d):
+                register_module(f)
+            sys.path.pop()
+
+
+def register_module(file):
+    try:
+        mod = importlib.import_module(os.path.splitext(file)[0])
+        mod.register()
+    except AttributeError:   # Tried to import __pycache__
+        pass

@@ -21,18 +21,10 @@ import pygame
 import vpy
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
-
 from constants import *
-from gui_utils import kmod
-from register import register
-
+from gui_utils import kmod, setup_api
 pygame.init()
 Tk().withdraw()
-
-
-def setup_api():
-    register(ADDON_PATHS)
-    vpy.context.scene = vpy.types.Scene()
 
 
 def gui():
