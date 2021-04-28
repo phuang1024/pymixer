@@ -30,10 +30,13 @@ pygame.init()
 Tk().withdraw()
 
 
-def gui():
+def setup_api():
     register(ADDON_PATHS)
-
     vpy.context.scene = vpy.types.Scene()
+
+
+def gui():
+    setup_api()
     path = ""
 
     pygame.display.set_caption("Pymixer")
