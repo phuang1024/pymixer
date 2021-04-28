@@ -19,6 +19,7 @@
 
 import pygame
 import vpy
+from copy import deepcopy
 from constants import *
 from gui_utils import draw_dashed_line
 pygame.init()
@@ -26,40 +27,49 @@ pygame.init()
 
 class Preview:
     def __init__(self):
-        self.prev_size = None
-        self.prev_loc = None
+        self.prev_self = None
 
         self.size = 540
         self.loc = [0, 0]
 
+        self.dragging = False
+        self.drag_start_pos = None
+        self.drag_start_loc = None
+
     def draw(self, surface, events, loc, size):
-        update = False
+        pos = pygame.mouse.get_pos()
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN:
-                update = True
-                if event.button == 4:
+                if event.button == 2:
+                    self.drag_start_pos = pos
+                    self.drag_start_loc = self.loc[:]
+                elif event.button == 4:
                     self.size *= 1.08
                 elif event.button == 5:
                     self.size /= 1.08
 
-        if update or size != self.prev_size or loc != self.prev_loc:
-            pygame.draw.rect(surface, BLACK, (*loc, *size))
+        mouse = pygame.mouse.get_pressed()
+        self.dragging = mouse[1]
+        if self.dragging:
+            self.loc = [
+                pos[0] - self.drag_start_pos[0] + self.drag_start_loc[0],
+                pos[1] - self.drag_start_pos[1] + self.drag_start_loc[1],
+            ]
 
-            surf = pygame.Surface(size, pygame.SRCALPHA)
-            x_center = loc[0] + size[0]/2
-            y_center = loc[1] + size[1]/2
+        pygame.draw.rect(surface, BLACK, (*loc, *size))
 
-            width = self.size
-            height = width / vpy.context.scene.output.x_res.get() * vpy.context.scene.output.y_res.get()
-            x = x_center + self.loc[0] - width/2
-            y = y_center + self.loc[1] - height/2
+        surf = pygame.Surface(size, pygame.SRCALPHA)
+        x_center = loc[0] + size[0]/2
+        y_center = loc[1] + size[1]/2
 
-            draw_dashed_line(surf, (x, y), (x+width, y), 6, GRAY, 1)
-            draw_dashed_line(surf, (x, y+height), (x+width, y+height), 6, GRAY, 1)
-            draw_dashed_line(surf, (x, y), (x, y+height), 6, GRAY, 1)
-            draw_dashed_line(surf, (x+width, y), (x+width, y+height), 6, GRAY, 1)
+        width = self.size
+        height = width / vpy.context.scene.output.x_res.get() * vpy.context.scene.output.y_res.get()
+        x = x_center + self.loc[0] - width/2
+        y = y_center + self.loc[1] - height/2
 
-            surface.blit(surf, loc)
+        draw_dashed_line(surf, (x, y), (x+width, y), 6, GRAY, 1)
+        draw_dashed_line(surf, (x, y+height), (x+width, y+height), 6, GRAY, 1)
+        draw_dashed_line(surf, (x, y), (x, y+height), 6, GRAY, 1)
+        draw_dashed_line(surf, (x+width, y), (x+width, y+height), 6, GRAY, 1)
 
-        self.prev_size = size
-        self.prev_loc = loc
+        surface.blit(surf, loc)
