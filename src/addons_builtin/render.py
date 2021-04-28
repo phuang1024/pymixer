@@ -40,7 +40,25 @@ class RENDER_PT_Output(PropertyGroup):
     fps = IntProp(
         name="FPS",
         description="Output frames per second.",
-        default=30, min=1, max=240
+        default=30, min=1, max=240,
+    )
+
+    frame_start: IntProp(
+        name="Frame Start",
+        description="Starting frame (inclusive) of animation.",
+        default=0, min=0, max=100000,
+    )
+
+    frame_end: IntProp(
+        name="Frame End",
+        description="Ending frame (inclusive) of animation.",
+        default=0, min=0, max=100000,
+    )
+
+    frame_current: IntProp(
+        name="Current Frame",
+        description="Current frame of animation.",
+        default=0, min=0, max=100000,
     )
 
 
