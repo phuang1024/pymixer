@@ -22,6 +22,7 @@ import os
 import importlib
 import pygame
 import vpy
+import shared
 from constants import *
 pygame.init()
 
@@ -83,3 +84,17 @@ def draw_dashed_line(surface, start, end, dash_size, color, size):
 
         x += dx
         y += dy
+
+
+def cursor_wrap(loc, size, margin):
+    nx, ny = shared.mouse_pos
+    if shared.mouse_pos[0] <= loc[0]+margin:
+        nx = size[0]
+    elif shared.mouse_pos[0] >= size[0]+loc[0]-margin:
+        nx = loc[0] + margin
+    if shared.mouse_pos[1] <= loc[1]+margin:
+        ny = size[1]
+    elif shared.mouse_pos[1] >= size[1]+loc[1]-margin:
+        ny = loc[1] + margin
+    if nx != shared.mouse_pos[0] or ny != shared.mouse_pos[1]:
+        pygame.mouse.set_pos(nx, ny)

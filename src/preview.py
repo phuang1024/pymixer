@@ -22,7 +22,7 @@ import vpy
 import shared
 from copy import deepcopy
 from constants import *
-from gui_utils import draw_dashed_line
+from gui_utils import cursor_wrap, draw_dashed_line
 pygame.init()
 
 
@@ -58,18 +58,7 @@ class Preview:
             ]
 
             # Cursor wrapping
-            # FIXME makes box jump around
-            nx, ny = shared.mouse_pos
-            if shared.mouse_pos[0] <= loc[0]+5:
-                nx = size[0]
-            elif shared.mouse_pos[0] >= size[0]+loc[0]-5:
-                nx = loc[0] + 5
-            if shared.mouse_pos[1] <= loc[1]+5:
-                nx = size[1]
-            elif shared.mouse_pos[1] >= size[1]+loc[1]-5:
-                nx = loc[1] + 5
-            if nx != shared.mouse_pos[0] or ny != shared.mouse_pos[1]:
-                pygame.mouse.set_pos(nx, ny)
+            cursor_wrap(loc, size, 5)
 
         # Draw grid
         pygame.draw.rect(surface, BLACK, (*loc, *size))
