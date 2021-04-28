@@ -117,3 +117,7 @@ def cursor_wrap(loc, size, margin):
         ny = loc[1] + margin
     if nx != shared.mouse_pos[0] or ny != shared.mouse_pos[1]:
         pygame.mouse.set_pos(nx, ny)
+
+
+def cursor_inside(loc, size):
+    return loc[0] <= shared.mouse_pos[0] <= loc[0]+size[0] and loc[1] <= shared.mouse_pos[1] <= loc[1]+size[1]

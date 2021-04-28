@@ -21,7 +21,7 @@ import pygame
 import vpy
 import shared
 from constants import *
-from gui_utils import ContextCompare, cursor_wrap, draw_dashed_line
+from gui_utils import ContextCompare, cursor_inside, cursor_wrap, draw_dashed_line
 pygame.init()
 
 
@@ -54,31 +54,32 @@ class Preview:
         self.draw_loc = loc
 
         # Check events
-        for event in shared.events:
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 2:
-                    self.drag_start_pos = shared.mouse_pos
-                    self.drag_start_loc = self.loc[:]
-                elif event.button == 4:
-                    self.size *= 1.08
-                elif event.button == 5:
-                    self.size /= 1.08
+        if cursor_inside(loc, size):
+            for event in shared.events:
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 2:
+                        self.drag_start_pos = shared.mouse_pos
+                        self.drag_start_loc = self.loc[:]
+                    elif event.button == 4:
+                        self.size *= 1.08
+                    elif event.button == 5:
+                        self.size /= 1.08
 
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_HOME and not self.dragging:
-                    self.loc = [0, 0]
-                    self.size = 540
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_HOME and not self.dragging:
+                        self.loc = [0, 0]
+                        self.size = 540
 
-        self.dragging = shared.mouse_pressed[1]
-        if self.dragging:
-            # Set new location
-            self.loc = [
-                shared.mouse_pos[0] - self.drag_start_pos[0] + self.drag_start_loc[0],
-                shared.mouse_pos[1] - self.drag_start_pos[1] + self.drag_start_loc[1],
-            ]
+            self.dragging = shared.mouse_pressed[1]
+            if self.dragging:
+                # Set new location
+                self.loc = [
+                    shared.mouse_pos[0] - self.drag_start_pos[0] + self.drag_start_loc[0],
+                    shared.mouse_pos[1] - self.drag_start_pos[1] + self.drag_start_loc[1],
+                ]
 
-            # Cursor wrapping
-            cursor_wrap(loc, size, 5)
+                # Cursor wrapping
+                # cursor_wrap(loc, size, 5)
 
         if not self.context.compare(self):
             # Draw grid
