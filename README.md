@@ -1,4 +1,4 @@
-# Video Editor
+# Pymixer
 
 Video editor with a Python API.
 

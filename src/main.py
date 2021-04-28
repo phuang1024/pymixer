@@ -1,5 +1,5 @@
 #
-#  Video Editor
+#  Pymixer
 #  Video editor with a Python API.
 #  Copyright Patrick Huang 2021
 #
@@ -31,7 +31,7 @@ from addon_manager import addon_manager
 def main():
     if len(sys.argv) >= 2:
         if sys.argv[1] in ("--help", "-h"):
-            print("Video Editor - GNU GPL 3 license")
+            print("Pymixer - GNU GPL 3 license")
             print("Usage:")
             print("  -h, --help             Show this help menu")
             print("  -a, --addon-manager    Open the CLI addon manager")

@@ -1,5 +1,5 @@
 #
-#  Video Editor
+#  Pymixer
 #  Video editor with a Python API.
 #  Copyright Patrick Huang 2021
 #
@@ -36,7 +36,7 @@ def gui():
     vpy.context.scene = vpy.types.Scene()
     path = ""
 
-    pygame.display.set_caption("Video Editor")
+    pygame.display.set_caption("Pymixer")
     clock = pygame.time.Clock()
     surface = pygame.display.set_mode((INIT_WIDTH, INIT_HEIGHT), pygame.RESIZABLE)
     surface.fill(BLACK)

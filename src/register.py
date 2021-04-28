@@ -1,5 +1,5 @@
 #
-#  Video Editor
+#  Pymixer
 #  Video editor with a Python API.
 #  Copyright Patrick Huang 2021
 #
