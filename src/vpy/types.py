@@ -202,3 +202,18 @@ class IntProp(Property):
         if value > self.max:
             value = self.max
         self.value = value
+
+
+class PropertyGroup:
+    """
+    Group of props.
+    Inherit from this and register when adding a property collection to Scene.
+    """
+
+    idname: str
+
+    def __getattr__(self, attr: str) -> Property:
+        if hasattr(self, attr):
+            return getattr(self, attr)
+        else:
+            raise ValueError(f"PropertyGroup has no attribute {attr}")
