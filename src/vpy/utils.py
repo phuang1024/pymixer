@@ -17,6 +17,18 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+GET_PROP = """
+@property
+def getter(self):
+    return self._values[{0}].get()
+""".strip()
+
+SET_PROP = """
+@coll.{0}.setter
+def setter(self, value):
+    self._values[{0}].set(value)
+""".strip()
+
 
 def register_class(cls):
     import vpy
@@ -28,6 +40,21 @@ def register_class(cls):
         coll = getattr(vpy.ops, group)
         if not hasattr(coll, name):
             coll.operators[name] = cls()
+
+    elif issubclass(cls, vpy.types.PropertyGroup):
+        coll = vpy.types.PropCollection()
+        for attr in cls.__dict__:
+            if not attr.startswith("__") and attr != "idname":
+                setattr(coll, attr, getattr(cls, attr))
+                # coll._values[attr] = getattr(cls, attr)
+
+                # Decorators for getting and setting
+                # exec(GET_PROP.format(attr))
+                # exec(SET_PROP.format(attr))
+                # setattr(coll, attr, getter)
+                # setattr(coll, f"{attr}.setter", setter)
+
+        setattr(vpy.types.Scene, cls.idname, coll)
 
     else:
         raise ValueError("Class to register must inherit from Operator")

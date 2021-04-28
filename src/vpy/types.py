@@ -22,6 +22,19 @@ from datetime import datetime
 from typing import Any, Dict
 
 
+# Class "declaration" needed for type hinting.
+class Scene: pass
+class Context: pass
+class Operator: pass
+class OpCollection: pass
+class OpsModule: pass
+class Property: pass
+class BoolProp: pass
+class IntProp: pass
+class PropertyGroup: pass
+class PropCollection: pass
+
+
 class Scene:
     """
     Scene class. This is saved and loaded from the project file.
@@ -39,6 +52,12 @@ class Scene:
         self.date = datetime.now().strftime("%Y-%m-%d %H-%M-%S").encode()
         self.is_saved = False
         self.is_dirty = False
+
+    def __getattr__(self, attr: str) -> PropCollection:
+        if hasattr(self, attr):
+            return getattr(self, attr)
+        else:
+            raise AttributeError(f"Scene has no attribute {attr}")
 
 
 class Context:
@@ -212,8 +231,20 @@ class PropertyGroup:
 
     idname: str
 
+
+class PropCollection:
+    """
+    Collection of properties, which will be added to Scene when a PropertyGroup is registered.
+    Decorators for getting and setting are added at register.
+    """
+
+    _values: Dict[str, Property]
+
+    def __init__(self) -> None:
+        self._values = {}
+
     def __getattr__(self, attr: str) -> Property:
         if hasattr(self, attr):
             return getattr(self, attr)
         else:
-            raise ValueError(f"PropertyGroup has no attribute {attr}")
+            raise AttributeError(f"PropCollection has no attribute {attr}")
