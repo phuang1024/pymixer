@@ -74,7 +74,8 @@ class Context:
     render_result: np.ndarray
 
     def __init__(self) -> None:
-        pass
+        self.scene = None
+        self.render_result = None
 
 
 class Operator:
@@ -96,7 +97,9 @@ class Operator:
         import vpy
 
         if self.poll(vpy.context, *args, **kwargs):
-            return self.execute(vpy.context, *args, **kwargs)
+            val = self.execute(vpy.context, *args, **kwargs)
+            if val not in ("FINISHED", "CANCELLED"):
+                raise ValueError("Invalid return in Operator call.")
         else:
             return "CANCELLED"
 
