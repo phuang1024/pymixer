@@ -20,15 +20,27 @@
 import pygame
 import vpy
 import shared
-from copy import deepcopy
 from constants import *
-from gui_utils import cursor_wrap, draw_dashed_line
+from gui_utils import ContextCompare, cursor_wrap, draw_dashed_line
 pygame.init()
 
 
 class Preview:
+    attrs = (
+        "size",
+        "loc",
+        "draw_size",
+        "draw_loc",
+        "dragging",
+        "drag_start_pos",
+        "drag_start_loc",
+    )
+
     def __init__(self):
-        self.prev_self = None
+        self.context = ContextCompare(self.attrs)
+
+        self.draw_size = None
+        self.draw_loc = None
 
         self.size = 540
         self.loc = [0, 0]
@@ -38,6 +50,9 @@ class Preview:
         self.drag_start_loc = None    # Preview position at start of drag
 
     def draw(self, surface, loc, size):
+        self.draw_size = size
+        self.draw_loc = loc
+
         # Check events
         for event in shared.events:
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -60,21 +75,24 @@ class Preview:
             # Cursor wrapping
             cursor_wrap(loc, size, 5)
 
-        # Draw grid
-        pygame.draw.rect(surface, BLACK, (*loc, *size))
+        if not self.context.compare(self):
+            # Draw grid
+            pygame.draw.rect(surface, BLACK, (*loc, *size))
 
-        surf = pygame.Surface(size, pygame.SRCALPHA)
-        x_center = loc[0] + size[0]/2
-        y_center = loc[1] + size[1]/2
+            surf = pygame.Surface(size, pygame.SRCALPHA)
+            x_center = loc[0] + size[0]/2
+            y_center = loc[1] + size[1]/2
 
-        width = self.size
-        height = width / vpy.context.scene.output.x_res.get() * vpy.context.scene.output.y_res.get()
-        x = x_center + self.loc[0] - width/2
-        y = y_center + self.loc[1] - height/2
+            width = self.size
+            height = width / vpy.context.scene.output.x_res.get() * vpy.context.scene.output.y_res.get()
+            x = x_center + self.loc[0] - width/2
+            y = y_center + self.loc[1] - height/2
 
-        draw_dashed_line(surf, (x, y), (x+width, y), 6, GRAY, 1)
-        draw_dashed_line(surf, (x, y+height), (x+width, y+height), 6, GRAY, 1)
-        draw_dashed_line(surf, (x, y), (x, y+height), 6, GRAY, 1)
-        draw_dashed_line(surf, (x+width, y), (x+width, y+height), 6, GRAY, 1)
+            draw_dashed_line(surf, (x, y), (x+width, y), 6, GRAY, 1)
+            draw_dashed_line(surf, (x, y+height), (x+width, y+height), 6, GRAY, 1)
+            draw_dashed_line(surf, (x, y), (x, y+height), 6, GRAY, 1)
+            draw_dashed_line(surf, (x+width, y), (x+width, y+height), 6, GRAY, 1)
 
-        surface.blit(surf, loc)
+            surface.blit(surf, loc)
+
+        self.context.update(self)

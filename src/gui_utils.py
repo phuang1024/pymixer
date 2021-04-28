@@ -23,8 +23,28 @@ import importlib
 import pygame
 import vpy
 import shared
+from copy import deepcopy
 from constants import *
 pygame.init()
+
+
+class ContextCompare:
+    def __init__(self, attrs):
+        self.attrs = attrs
+        self.prev = {a: None for a in attrs}
+
+    def compare(self, obj):
+        """
+        Returns whether they are a match.
+        """
+        for a in self.attrs:
+            if self.prev[a] != getattr(obj, a):
+                return False
+        return True
+
+    def update(self, obj):
+        for a in self.attrs:
+            self.prev[a] = deepcopy(getattr(obj, a))
 
 
 def setup_api():
