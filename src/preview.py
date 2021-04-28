@@ -38,6 +38,7 @@ class Preview:
         self.drag_start_loc = None    # Preview position at start of drag
 
     def draw(self, surface, loc, size):
+        # Check events
         for event in shared.events:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 2:
@@ -50,11 +51,27 @@ class Preview:
 
         self.dragging = shared.mouse_pressed[1]
         if self.dragging:
+            # Set new location
             self.loc = [
                 shared.mouse_pos[0] - self.drag_start_pos[0] + self.drag_start_loc[0],
                 shared.mouse_pos[1] - self.drag_start_pos[1] + self.drag_start_loc[1],
             ]
 
+            # Cursor wrapping
+            # FIXME makes box jump around
+            nx, ny = shared.mouse_pos
+            if shared.mouse_pos[0] <= loc[0]+5:
+                nx = size[0]
+            elif shared.mouse_pos[0] >= size[0]+loc[0]-5:
+                nx = loc[0] + 5
+            if shared.mouse_pos[1] <= loc[1]+5:
+                nx = size[1]
+            elif shared.mouse_pos[1] >= size[1]+loc[1]-5:
+                nx = loc[1] + 5
+            if nx != shared.mouse_pos[0] or ny != shared.mouse_pos[1]:
+                pygame.mouse.set_pos(nx, ny)
+
+        # Draw grid
         pygame.draw.rect(surface, BLACK, (*loc, *size))
 
         surf = pygame.Surface(size, pygame.SRCALPHA)
