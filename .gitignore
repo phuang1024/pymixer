@@ -2,3 +2,5 @@ __pycache__
 .vscode
 
 *.vid
+
+/src/addon_paths.txt
