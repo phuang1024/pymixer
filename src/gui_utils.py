@@ -31,6 +31,23 @@ def setup_api():
     vpy.context.scene = vpy.types.Scene()
 
 
+def register(dirs):
+    for d in dirs:
+        if os.path.isdir(d):
+            sys.path.append(d)
+            for f in os.listdir(d):
+                register_module(f)
+            sys.path.pop()
+
+
+def register_module(file):
+    try:
+        mod = importlib.import_module(os.path.splitext(file)[0])
+        mod.register()
+    except AttributeError:   # Tried to import __pycache__
+        pass
+
+
 def kmod(key, target_key, ctrl=False, shift=False, alt=False):
     keys = pygame.key.get_pressed()
     ctrl_pressed = (keys[pygame.K_LCTRL] or keys[pygame.K_RCTRL])
@@ -50,18 +67,19 @@ def kmod(key, target_key, ctrl=False, shift=False, alt=False):
     return False
 
 
-def register(dirs):
-    for d in dirs:
-        if os.path.isdir(d):
-            sys.path.append(d)
-            for f in os.listdir(d):
-                register_module(f)
-            sys.path.pop()
+def draw_dashed_line(surface, start, end, dash_size, color, size):
+    x, y = start
+    ex, ey = end
+    dist = (abs(x-ex)**2 + abs(y-ey)**2) ** 0.5
+    steps = int(dist/dash_size) + 1
+    dx = abs(x-ex) / steps
+    dy = abs(y-ey) / steps
 
+    for i in range(steps):
+        if i % 2 == 0:
+            dist_so_far = dash_size * (i+1)
+            fac = min(dash_size, dist-dist_so_far) / dash_size
+            pygame.draw.line(surface, color, (x, y), (x + dx*fac, y + dy*fac), size)
 
-def register_module(file):
-    try:
-        mod = importlib.import_module(os.path.splitext(file)[0])
-        mod.register()
-    except AttributeError:   # Tried to import __pycache__
-        pass
+        x += dx
+        y += dy
