@@ -55,6 +55,12 @@ class RENDER_PT_Output(PropertyGroup):
         default=0, min=0, max=100000,
     )
 
+    frame_step: IntProp(
+        name="Frame Step",
+        description="Increment of frames.",
+        default=1, min=1, max=240
+    )
+
     frame_current: IntProp(
         name="Current Frame",
         description="Current frame of animation.",
