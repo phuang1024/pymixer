@@ -19,7 +19,7 @@
 
 import time
 from datetime import datetime
-from typing import Dict
+from typing import Any, Dict
 
 
 class Scene:
@@ -142,3 +142,63 @@ class OpsModule:
             return self.colls[attr]
         else:
             raise AttributeError(f"OpsModule has no attribute {attr}")
+
+
+class Property:
+    """
+    Base property class. BoolProp, IntProp, ... extend off of this.
+    """
+
+    name: str
+    description: str
+
+    type: type
+    default: type
+    value: type
+
+    def get(self) -> type:
+        return self.value
+
+    def set(self, value: type) -> None:
+        self.value = value
+
+
+class BoolProp(Property):
+    """
+    Boolean property.
+    """
+
+    type = bool
+
+    def __init__(self, name: str = "", description: str = "", default: type = False) -> None:
+        self.name = name
+        self.description = description
+        self.default = default
+
+        self.value = default
+
+
+class IntProp(Property):
+    """
+    Integer property.
+    """
+
+    type = int
+    min: type
+    max: type
+
+    def __init__(self, name: str = "", description: str = "", default: type = 0, min: type = 0, max: type = 10) -> None:
+        self.name = name
+        self.description = description
+        self.default = default
+        self.min = min
+        self.max = max
+
+        self.value = default
+
+    def set(self, value: type) -> None:
+        if value < self.min:
+            value = self.min
+        if value > self.max:
+            value = self.max
+        self.value = value
