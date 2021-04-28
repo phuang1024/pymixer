@@ -17,6 +17,10 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+import numpy as np
+import pygame
+pygame.init()
+
 GET_PROP = """
 @property
 def getter(self):
@@ -30,7 +34,7 @@ def setter(self, value):
 """.strip()
 
 
-def register_class(cls):
+def register_class(cls) -> None:
     import vpy
 
     if issubclass(cls, vpy.types.Operator):
@@ -59,6 +63,12 @@ def register_class(cls):
     else:
         raise ValueError("Class to register must inherit from Operator")
 
-
-def unregister_class(cls):
+def unregister_class(cls) -> None:
     import vpy
+
+
+def surf_to_array(surf: pygame.Surface) -> np.ndarray:
+    return pygame.surfarray.array3d(surf).swapaxes(0, 1)
+
+def array_to_surf(array: np.ndarray) -> pygame.Surface:
+    return pygame.image.frombuffer(array.tobytes(), array.shape[1::-1], "RGB")

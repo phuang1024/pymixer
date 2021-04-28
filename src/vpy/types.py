@@ -18,6 +18,7 @@
 #
 
 import time
+import numpy as np
 from datetime import datetime
 from typing import Any, Dict
 
@@ -67,6 +68,7 @@ class Context:
     """
 
     scene: Scene
+    render_result: np.ndarray
 
     def __init__(self) -> None:
         pass
