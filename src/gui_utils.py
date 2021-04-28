@@ -51,7 +51,6 @@ def setup_api():
     register(ADDON_PATHS)
     vpy.context.scene = vpy.types.Scene()
 
-
 def register(dirs):
     for d in dirs:
         if os.path.isdir(d):

@@ -116,6 +116,7 @@ class RENDER_OT_SaveImage(Operator):
 classes = (
     RENDER_PT_Output,
     RENDER_OT_RenderImage,
+    RENDER_OT_SaveImage,
 )
 
 def register():
