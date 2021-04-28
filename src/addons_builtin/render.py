@@ -17,9 +17,11 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+import pygame
 import vpy
-from vpy.types import PropertyGroup, Operator
-from vpy.types import BoolProp, IntProp
+from vpy.types import PropertyGroup, Operator, Context, Scene
+from vpy.props import BoolProp, IntProp, EnumProp
+pygame.init()
 
 
 class RENDER_PT_Output(PropertyGroup):
@@ -67,9 +69,53 @@ class RENDER_PT_Output(PropertyGroup):
         default=0, min=0, max=100000,
     )
 
+    format: EnumProp(
+        name="Output Format",
+        description="Format of output, eg image type, video type, ...",
+        items=(
+            ("I1", "JPEG", "Output in .jpg image format."),
+            ("I2", "PNG", "Output in .png image format."),
+            ("I3", "TIFF", "Output in .tif image format."),
+            ("V1", "MP4", "Output in .mp4 video format."),
+            ("V2", "MOV", "Output in .mov video format."),
+        )
+    )
+
+
+class RENDER_OT_RenderImage(Operator):
+    name = "Render Image"
+    description = "Render current frame and save to vpy.context.render_result"
+    idname = "render.render_image"
+
+    def poll(self, context: Context, *args, **kwargs):
+        return isinstance(context.scene, Scene)
+
+    def execute(self, context: Context, *args, **kwargs):
+        # TODO render image
+        context.render_result = vpy.utils.surf_to_array(pygame.Surface((1280, 720)))
+        return "FINISHED"
+
+
+class RENDER_OT_SaveImage(Operator):
+    name = "Save Image"
+    description = "Save image as a file."
+    idname = "render.save_image"
+
+    def poll(self, context: Context, *args, **kwargs) -> bool:
+        return context.render_result is not None
+
+    def execute(self, context: Context, *args, **kwargs) -> str:
+        if "path" not in kwargs:
+            self.report("ERROR", "Did not give path argument.")
+            return "CANCELLED"
+
+        pygame.image.save(vpy.utils.array_to_surf(context.render_result), kwargs["path"])
+        return "FINISHED"
+
 
 classes = (
     RENDER_PT_Output,
+    RENDER_OT_RenderImage,
 )
 
 def register():
