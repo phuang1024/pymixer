@@ -34,7 +34,7 @@ class RENDER_PT_Output(PropertyGroup):
     y_res = IntProp(
         name="Y Resolution",
         description="Output Y resolution in pixels.",
-        default=1920, min=0, max=100000,
+        default=1080, min=0, max=100000,
     )
 
     fps = IntProp(

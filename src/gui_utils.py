@@ -78,7 +78,7 @@ def draw_dashed_line(surface, start, end, dash_size, color, size):
     for i in range(steps):
         if i % 2 == 0:
             dist_so_far = dash_size * (i+1)
-            fac = min(dash_size, dist-dist_so_far) / dash_size
+            fac = min(dash_size, abs(dist-dist_so_far)) / dash_size
             pygame.draw.line(surface, color, (x, y), (x + dx*fac, y + dy*fac), size)
 
         x += dx
