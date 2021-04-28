@@ -19,12 +19,25 @@
 
 import os
 
+
+def write_addon_paths(paths):
+    with open(ADDON_PATHS_FILE, "w") as file:
+        file.write("\n".join(paths))
+
+
 PARENT = os.path.dirname(os.path.realpath(__file__))
 MODULE_PATH = os.path.join(PARENT, "vpy")
-ADDON_PATHS = (
-    os.path.join(PARENT, "addons_builtin"),
-    os.path.join(PARENT, "addons_installed"),
-)
+ADDON_PATHS_FILE = os.path.join(PARENT, "addon_paths.txt")
+
+if os.path.isfile(ADDON_PATHS_FILE):
+    with open(ADDON_PATHS_FILE, "r") as file:
+        ADDON_PATHS = [l for l in file.read().strip().split() if not l.startswith("#")]
+else:
+    ADDON_PATHS = (
+        os.path.join(PARENT, "addons_builtin"),
+        os.path.join(PARENT, "addons_installed"),
+    )
+    write_addon_paths(ADDON_PATHS)
 
 INIT_WIDTH = 1280
 INIT_HEIGHT = 720
