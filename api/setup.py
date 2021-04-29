@@ -28,14 +28,15 @@ SRC = os.path.join(os.path.dirname(PARENT), "src", "vpy")
 long_description = """
 # Vpy
 
-A Python api for https://github.com/HuangPatrick16777216/video_editor
+A Python api for https://github.com/HuangPatrick16777216/pymixer
 
 `pip install vpy-module`
 
 Inspired by Blender's API.
 
-This module is provided on PyPI for autocomplete and type hinting when developing.
-The API is included in every release of the video editor.
+This module is provided on PyPI for autocomplete and type hinting when developing,
+and does not need to be installed by pip to run Pymixer.
+The latest API module is included in every release of the video editor.
 """.strip()
 
 if os.path.isdir(DEST):
