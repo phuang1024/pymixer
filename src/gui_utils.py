@@ -59,7 +59,6 @@ def register(dirs):
                 register_module(f)
             sys.path.pop()
 
-
 def register_module(file):
     try:
         mod = importlib.import_module(os.path.splitext(file)[0])
@@ -86,7 +85,6 @@ def kmod(key, target_key, ctrl=False, shift=False, alt=False):
         return True
     return False
 
-
 def draw_dashed_line(surface, start, end, dash_size, color, size):
     x, y = start
     ex, ey = end
@@ -104,7 +102,6 @@ def draw_dashed_line(surface, start, end, dash_size, color, size):
         x += dx
         y += dy
 
-
 def cursor_wrap(loc, size, margin):
     nx, ny = shared.mouse_pos
     if shared.mouse_pos[0] <= loc[0]+margin:
@@ -117,7 +114,6 @@ def cursor_wrap(loc, size, margin):
         ny = loc[1] + margin
     if nx != shared.mouse_pos[0] or ny != shared.mouse_pos[1]:
         pygame.mouse.set_pos(nx, ny)
-
 
 def cursor_inside(loc, size):
     return loc[0] <= shared.mouse_pos[0] <= loc[0]+size[0] and loc[1] <= shared.mouse_pos[1] <= loc[1]+size[1]
