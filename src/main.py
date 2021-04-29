@@ -19,6 +19,7 @@
 
 import sys
 import os
+import argparse
 from constants import *
 
 sys.path.insert(0, MODULE_PATH)
@@ -26,19 +27,20 @@ os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "hide"
 
 from gui import gui
 from addon_manager import addon_manager
+from cli import cli
 
 
 def main():
-    if len(sys.argv) >= 2:
-        if sys.argv[1] in ("--help", "-h"):
-            print("Pymixer - GNU GPL 3 license")
-            print("Usage:")
-            print("  -h, --help             Show this help menu")
-            print("  -a, --addon-manager    Open the CLI addon manager")
+    parser = argparse.ArgumentParser(description="Run Pymixer in different modes. Launch the GUI by providing no arguments.")
+    parser.add_argument("-c", "--cli", help="send a command to the CLI interface", type=str)
+    parser.add_argument("-a", "--addons", help="open the CLI addon manager", action="store_true")
+    parser.add_argument("-g", "--gui", help="open the GUI (also works with no argument)", action="store_true")   # Added for completion
+    args = parser.parse_args()
 
-        elif sys.argv[1] in ("-a", "--addon-manager"):
-            addon_manager()
-
+    if args.cli:
+        cli(args.cli)
+    elif args.addons:
+        addon_manager()
     else:
         gui()
 
