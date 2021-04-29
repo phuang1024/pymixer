@@ -38,7 +38,7 @@ class Preferences:
         self.cache = {}
         threading.Thread(target=self.queue_process).start()
 
-    def __getattr__(self, attr):
+    def get(self, attr):
         if attr in self.cache:
             return self.cache[attr]
         else:
@@ -46,11 +46,8 @@ class Preferences:
             self.cache[attr] = val
             return val
 
-    def __setattr__(self, attr, val):
-        self.cache[attr] = val
-        data = self.load()
-        data[attr] = val
-        self.dump(data)
+    def set(self, attr, val):
+        self.queue.append((attr, val))
 
     def queue_process(self):
         while get_run():
