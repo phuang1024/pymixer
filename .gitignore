@@ -4,3 +4,5 @@ __pycache__
 *.vid
 
 settings.json
+
+/build/*.deb
