@@ -30,6 +30,7 @@ def set_run(val):
 
 PARENT = os.path.dirname(os.path.realpath(__file__))
 PREFS_PATH = os.path.join(PARENT, "settings.json")
+PREFS_LOCK_PATH = os.path.join(PARENT, "settings.lock")
 MODULE_PATH = os.path.join(PARENT, "vpy")
 ADDON_PATHS = (
     os.path.join(PARENT, "addons_builtin"),

@@ -25,21 +25,58 @@ from constants import *
 
 
 class Preferences:
-    def __init__(self):
-        if not os.path.isfile(PREFS_PATH):
+    #TODO write time into lock, and override when time is too old
+    # to prevent lock staying when exiting abnormally.
+
+    def __init__(self, path, lock_path):
+        self.path = path
+        self.lock_path = lock_path
+        if not os.path.isfile(self.path):
             self.dump({})
 
         self.queue = []
+        self.cache = {}
         threading.Thread(target=self.queue_process).start()
+
+    def __getattr__(self, attr):
+        if attr in self.cache:
+            return self.cache[attr]
+        else:
+            val = self.load()[attr]
+            self.cache[attr] = val
+            return val
+
+    def __setattr__(self, attr, val):
+        self.cache[attr] = val
+        data = self.load()
+        data[attr] = val
+        self.dump(data)
 
     def queue_process(self):
         while get_run():
             time.sleep(0.05)
+            if len(self.queue) > 0:
+                key, val = self.queue.pop(0)
+                self.cache[key] = val
+
+                data = self.load()
+                data[key] = val
+                self.dump(data)
 
     def dump(self, data):
-        with open(PREFS_PATH, "w") as file:
+        # while os.path.isfile(self.lock_path):
+        #     time.sleep(0.01)
+        # with open(self.lock_path, "w") as file:
+        #     pass
+        with open(self.path, "w") as file:
             json.dump(data, file, indent=4)
+        # os.remove(self.lock_path)
 
     def load(self):
-        with open(PREFS_PATH, "r") as file:
+        # while os.path.isfile(self.lock_path):
+        #     time.sleep(0.01)
+        # with open(self.lock_path, "w") as file:
+        #     pass
+        with open(self.path, "r") as file:
+            # os.remove(self.lock_path)
             return json.load(file)

@@ -63,7 +63,7 @@ def gui():
     width, height = INIT_WIDTH, INIT_HEIGHT
 
     wm = WindowManager()
-    prefs = Preferences()
+    prefs = Preferences(PREFS_PATH, PREFS_LOCK_PATH)
 
     while get_run():
         clock.tick(FPS)
