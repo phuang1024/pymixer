@@ -17,6 +17,7 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+from os import getrandom
 import pygame
 import vpy
 import shared
@@ -24,6 +25,7 @@ from tkinter import Tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 from constants import *
 from gui_utils import kmod, setup_api
+from prefs import Preferences
 from preview import Preview
 pygame.init()
 Tk().withdraw()
@@ -61,15 +63,15 @@ def gui():
     width, height = INIT_WIDTH, INIT_HEIGHT
 
     wm = WindowManager()
+    prefs = Preferences()
 
-    while True:
+    while get_run():
         clock.tick(FPS)
         pygame.display.update()
         events = pygame.event.get()
         for event in events:
             if event.type == pygame.QUIT:
-                pygame.quit()
-                return
+                set_run(False)
 
             elif event.type == pygame.VIDEORESIZE:
                 resized = True
@@ -77,8 +79,7 @@ def gui():
 
             elif event.type == pygame.KEYDOWN:
                 if kmod(event.key, pygame.K_q, ctrl=True):
-                    pygame.quit()
-                    return
+                    set_run(False)
 
                 elif kmod(event.key, pygame.K_s, ctrl=True):
                     if vpy.context.scene.is_saved and path:
@@ -113,3 +114,6 @@ def gui():
         wm.draw(surface)
 
         resized = False
+
+    set_run(False)
+    pygame.quit()

@@ -20,24 +20,21 @@
 import os
 
 
-def write_addon_paths(paths):
-    with open(ADDON_PATHS_FILE, "w") as file:
-        file.write("\n".join(paths))
+def get_run():
+    return run
+
+def set_run(val):
+    global run
+    run = val
 
 
 PARENT = os.path.dirname(os.path.realpath(__file__))
+PREFS_PATH = os.path.join(PARENT, "settings.json")
 MODULE_PATH = os.path.join(PARENT, "vpy")
-ADDON_PATHS_FILE = os.path.join(PARENT, "addon_paths.txt")
-
-if os.path.isfile(ADDON_PATHS_FILE):
-    with open(ADDON_PATHS_FILE, "r") as file:
-        ADDON_PATHS = [l for l in file.read().strip().split() if not l.startswith("#")]
-else:
-    ADDON_PATHS = (
-        os.path.join(PARENT, "addons_builtin"),
-        os.path.join(PARENT, "addons_installed"),
-    )
-    write_addon_paths(ADDON_PATHS)
+ADDON_PATHS = (
+    os.path.join(PARENT, "addons_builtin"),
+    os.path.join(PARENT, "addons_installed"),
+)
 
 INIT_WIDTH = 1280
 INIT_HEIGHT = 720
@@ -48,3 +45,5 @@ GRAY_DARK = (64, 64, 64)
 GRAY = (128, 128, 128)
 GRAY_LIGHT = (192, 192, 192)
 WHITE = (255, 255, 255)
+
+run = True
