@@ -3,4 +3,4 @@ __pycache__
 
 *.vid
 
-/src/addon_paths.txt
+settings.json
