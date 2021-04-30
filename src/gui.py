@@ -68,9 +68,10 @@ class WindowManager:
                 self.y_sep = shared.mouse_pos[1]/height
 
         else:
+            if self.dragging != 0:
+                self.prefs.set("layout.verticalsep", self.x_sep)
+                self.prefs.set("layout.horizontalsep", self.y_sep)
             self.dragging = 0
-            self.prefs.set("layout.verticalsep", self.x_sep)
-            self.prefs.set("layout.horizontalsep", self.y_sep)
 
         # Preview
         loc = (0, 0)
