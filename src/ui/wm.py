@@ -23,6 +23,7 @@ from constants import *
 from gui_utils import *
 from prefs import Preferences
 from ui.preview import Preview
+from ui.properties import Properties
 from ui.sequencer import Sequencer
 pygame.init()
 
@@ -39,6 +40,7 @@ class WindowManager:
 
         self.preview = Preview()
         self.sequencer = Sequencer()
+        self.properties = Properties()
         # self.cursor = Cursor()
 
         self.dragging = 0    # bit 0 = dragging vertical, bit 1 = dragging horizontal
@@ -80,6 +82,11 @@ class WindowManager:
         loc = (0, y_sep)
         size = (x_sep, height-y_sep)
         self.sequencer.draw(surface, loc, size)
+
+        # Properties
+        loc = (x_sep, 0)
+        size = (width-x_sep, height)
+        self.properties.draw(surface, loc, size)
 
         # Window separating grid
         pygame.draw.line(surface, GRAY_DARK, (0, y_sep), (x_sep, y_sep), 2)
