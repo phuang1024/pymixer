@@ -47,6 +47,18 @@ class ContextCompare:
             self.prev[a] = deepcopy(getattr(obj, a))
 
 
+class Cursor:
+    def __init__(self):
+        pygame.mouse.set_visible(False)
+        self.cursor = "NORMAL"
+
+    def set_cursor(self, name):
+        if name in CURSORS:
+            self.cursor = name
+        else:
+            raise KeyError(f"{name} not in cursors.")
+
+
 def setup_api():
     register(ADDON_PATHS)
     vpy.context.scene = vpy.types.Scene()

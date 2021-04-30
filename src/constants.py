@@ -18,6 +18,8 @@
 #
 
 import os
+import pygame
+pygame.init()
 
 
 def get_run():
@@ -37,6 +39,12 @@ ADDON_PATHS = (
     os.path.join(PARENT, "addons_installed"),
 )
 
+CURSORS = {
+    "NORMAL": ["cursor_normal.jpg", None, (13, 6)],
+    "HORIZONTAL": ["cursor_horizontal-arrow.jpg", None, (24, 24)],
+    "VERTICAL": ["cursor_vertical-arrow.jpg", None, (24, 24)],
+}
+
 INIT_WIDTH = 1280
 INIT_HEIGHT = 720
 FPS = 60
@@ -48,3 +56,9 @@ GRAY_LIGHT = (192, 192, 192)
 WHITE = (255, 255, 255)
 
 run = True
+
+
+for i in CURSORS:
+    path = os.path.join(PARENT, "assets", CURSORS[i][0])
+    img = pygame.image.load(path)
+    CURSORS[i][1] = img

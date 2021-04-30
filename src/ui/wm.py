@@ -20,6 +20,7 @@
 import pygame
 import shared
 from constants import *
+from gui_utils import *
 from prefs import Preferences
 from ui.preview import Preview
 from ui.sequencer import Sequencer
@@ -38,6 +39,7 @@ class WindowManager:
 
         self.preview = Preview()
         self.sequencer = Sequencer()
+        # self.cursor = Cursor()
 
         self.dragging = 0    # bit 0 = dragging vertical, bit 1 = dragging horizontal
         self.x_sep = self.prefs.get("layout.verticalsep")
