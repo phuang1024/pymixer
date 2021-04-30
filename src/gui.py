@@ -32,19 +32,36 @@ Tk().withdraw()
 
 
 class WindowManager:
+    drag_margin = 5
+
     def __init__(self, prefs: Preferences):
         self.prefs = prefs
-        if not prefs.has("layout.vertical_fac"):
-            prefs.set("layout.vertical_fac", 0.8)
-        if not prefs.has("layout.horizontal_fac"):
-            prefs.set("layout.horizontal_fac", 0.5)
+        if not prefs.has("layout.verticalsep"):
+            prefs.set("layout.verticalsep", 0.8)
+        if not prefs.has("layout.horizontalsep"):
+            prefs.set("layout.horizontalsep", 0.5)
 
         self.preview = Preview()
 
+        self.dragging = 0    # 0 = not dragging, 1 = dragging horizontal, 2 = dragging vertical
+        self.x_sep = self.prefs.get("layout.verticalsep")
+        self.y_sep = self.prefs.get("layout.horizontalsep")
+
     def draw(self, surface):
         width, height = surface.get_size()
-        x_sep = width * self.prefs.get("layout.vertical_fac")
-        y_sep = height * self.prefs.get("layout.horizontal_fac")
+        x_sep = self.x_sep*width
+        y_sep = self.y_sep*height
+
+        # Grid resize
+        if shared.mouse_pressed[0]:
+            margin = self.drag_margin
+
+            # Drag vertical separator
+            if (x_sep-margin <= shared.mouse_pos[0] <= x_sep+margin) or self.dragging == 1:
+                self.dragging = 1
+                self.x_sep = shared.mouse_pos[0]/width
+        else:
+            self.dragging = 0
 
         # Preview
         loc = (0, 0)
@@ -71,7 +88,6 @@ def gui():
     prefs = Preferences(PREFS_PATH, PREFS_LOCK_PATH)
     wm = WindowManager(prefs)
 
-    time.sleep(0.5)
     while get_run():
         clock.tick(FPS)
         pygame.display.update()
