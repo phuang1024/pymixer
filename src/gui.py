@@ -17,7 +17,7 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from os import getrandom
+import time
 import pygame
 import vpy
 import shared
@@ -32,13 +32,19 @@ Tk().withdraw()
 
 
 class WindowManager:
-    def __init__(self):
+    def __init__(self, prefs: Preferences):
+        self.prefs = prefs
+        if not prefs.has("layout.vertical_fac"):
+            prefs.set("layout.vertical_fac", 0.8)
+        if not prefs.has("layout.horizontal_fac"):
+            prefs.set("layout.horizontal_fac", 0.5)
+
         self.preview = Preview()
 
     def draw(self, surface):
         width, height = surface.get_size()
-        x_sep = width * 0.8
-        y_sep = height * 0.5
+        x_sep = width * self.prefs.get("layout.vertical_fac")
+        y_sep = height * self.prefs.get("layout.horizontal_fac")
 
         # Preview
         loc = (0, 0)
@@ -62,9 +68,10 @@ def gui():
     resized = False
     width, height = INIT_WIDTH, INIT_HEIGHT
 
-    wm = WindowManager()
     prefs = Preferences(PREFS_PATH, PREFS_LOCK_PATH)
+    wm = WindowManager(prefs)
 
+    time.sleep(0.5)
     while get_run():
         clock.tick(FPS)
         pygame.display.update()

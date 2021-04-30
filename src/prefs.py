@@ -38,6 +38,12 @@ class Preferences:
         self.cache = {}
         threading.Thread(target=self.queue_process).start()
 
+    def has(self, attr):
+        if attr in self.cache:
+            return True
+        else:
+            return attr in self.load()
+
     def get(self, attr):
         if attr in self.cache:
             return self.cache[attr]
