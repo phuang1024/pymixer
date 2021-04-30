@@ -36,7 +36,6 @@ class Preferences:
 
         self.queue = []
         self.cache = {}
-        threading.Thread(target=self.queue_process).start()
 
     def has(self, attr):
         if attr in self.cache:
@@ -53,18 +52,10 @@ class Preferences:
             return val
 
     def set(self, attr, val):
-        self.queue.append((attr, val))
-
-    def queue_process(self):
-        while get_run():
-            time.sleep(0.05)
-            if len(self.queue) > 0:
-                key, val = self.queue.pop(0)
-                self.cache[key] = val
-
-                data = self.load()
-                data[key] = val
-                self.dump(data)
+        self.cache[attr] = val
+        data = self.load()
+        data[attr] = val
+        self.dump(data)
 
     def dump(self, data):
         # while os.path.isfile(self.lock_path):
