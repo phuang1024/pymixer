@@ -22,6 +22,7 @@ import shared
 from constants import *
 from prefs import Preferences
 from ui.preview import Preview
+from ui.sequencer import Sequencer
 pygame.init()
 
 
@@ -36,6 +37,7 @@ class WindowManager:
             prefs.set("layout.horizontalsep", 0.5)
 
         self.preview = Preview()
+        self.sequencer = Sequencer()
 
         self.dragging = 0    # bit 0 = dragging vertical, bit 1 = dragging horizontal
         self.x_sep = self.prefs.get("layout.verticalsep")
@@ -71,6 +73,11 @@ class WindowManager:
         loc = (0, 0)
         size = (x_sep, y_sep)
         self.preview.draw(surface, loc, size)
+
+        # Sequencer
+        loc = (0, y_sep)
+        size = (x_sep, height-y_sep)
+        self.sequencer.draw(surface, loc, size)
 
         # Window separating grid
         pygame.draw.line(surface, GRAY_DARK, (0, y_sep), (x_sep, y_sep), 2)

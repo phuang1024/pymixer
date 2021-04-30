@@ -82,13 +82,13 @@ class Preview:
                 # cursor_wrap(loc, size, 5)
 
         if not self.context.compare(self):
-            # Draw grid
             pygame.draw.rect(surface, BLACK, (*loc, *size))
 
             surf = pygame.Surface(size, pygame.SRCALPHA)
             x_center = loc[0] + size[0]/2
             y_center = loc[1] + size[1]/2
 
+            # Draw grid
             width = self.size
             height = width / vpy.context.scene.output.x_res.get() * vpy.context.scene.output.y_res.get()
             x = x_center + self.loc[0] - width/2
