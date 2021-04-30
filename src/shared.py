@@ -17,7 +17,12 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+events = None
+
 mouse_pos = None
 mouse_pressed = None
+mouse_event_1 = None
+mouse_event_2 = None
+mouse_event_3 = None
+
 keys_pressed = None
-events = None

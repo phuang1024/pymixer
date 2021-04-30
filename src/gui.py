@@ -57,12 +57,13 @@ class WindowManager:
             margin = self.drag_margin
 
             # Drag vertical separator
-            if (x_sep-margin<=shared.mouse_pos[0]<=x_sep+margin) or self.dragging&1:
+            if (shared.mouse_event_1 and x_sep-margin<=shared.mouse_pos[0]<=x_sep+margin) or self.dragging&1:
                 self.dragging |= 1
                 self.x_sep = shared.mouse_pos[0]/width
 
             # Drag horizontal separator
-            if (y_sep-margin<=shared.mouse_pos[1]<=y_sep+margin and shared.mouse_pos[0]<=x_sep+margin) or self.dragging&2:
+            if (shared.mouse_event_1 and y_sep-margin<=shared.mouse_pos[1]<=y_sep+margin and
+                    shared.mouse_pos[0]<=x_sep+margin) or self.dragging&2:
                 self.dragging |= 2
                 self.y_sep = shared.mouse_pos[1]/height
 
@@ -139,6 +140,17 @@ def gui():
         shared.mouse_pressed = pygame.mouse.get_pressed()
         shared.keys_pressed = pygame.key.get_pressed()
         shared.events = events
+        shared.mouse_event_1 = False
+        shared.mouse_event_2 = False
+        shared.mouse_event_3 = False
+        for event in events:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    shared.mouse_event_1 = True
+                elif event.button == 2:
+                    shared.mouse_event_2 = True
+                elif event.button == 3:
+                    shared.mouse_event_3 = True
 
         if resized:
             surface.fill(BLACK)
