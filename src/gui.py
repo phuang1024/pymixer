@@ -43,7 +43,7 @@ class WindowManager:
 
         self.preview = Preview()
 
-        self.dragging = 0    # 0 = not dragging, 1 = dragging horizontal, 2 = dragging vertical
+        self.dragging = 0    # bit 0 = dragging vertical, bit 1 = dragging horizontal
         self.x_sep = self.prefs.get("layout.verticalsep")
         self.y_sep = self.prefs.get("layout.horizontalsep")
 
@@ -57,11 +57,19 @@ class WindowManager:
             margin = self.drag_margin
 
             # Drag vertical separator
-            if (x_sep-margin <= shared.mouse_pos[0] <= x_sep+margin) or self.dragging == 1:
-                self.dragging = 1
+            if (x_sep-margin<=shared.mouse_pos[0]<=x_sep+margin) or self.dragging&1:
+                self.dragging |= 1
                 self.x_sep = shared.mouse_pos[0]/width
+
+            # Drag horizontal separator
+            if (y_sep-margin<=shared.mouse_pos[1]<=y_sep+margin and shared.mouse_pos[0]<=x_sep+margin) or self.dragging&2:
+                self.dragging |= 2
+                self.y_sep = shared.mouse_pos[1]/height
+
         else:
             self.dragging = 0
+            self.prefs.set("layout.verticalsep", self.x_sep)
+            self.prefs.set("layout.horizontalsep", self.y_sep)
 
         # Preview
         loc = (0, 0)
