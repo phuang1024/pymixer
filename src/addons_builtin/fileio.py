@@ -32,11 +32,9 @@ class CORE_OT_SaveScene(Operator):
     description = "Saves scene as a binary file."
     idname = "core.save_scene"
 
-    def execute(self, context: Context, *args, **kwargs) -> str:
-        if "path" not in kwargs:
-            self.report("ERROR", "Did not give path argument.")
-            return "CANCELLED"
+    kwargs_include = ("path",)
 
+    def execute(self, context: Context, *args, **kwargs) -> str:
         with open(kwargs["path"], "wb") as file:
             scene = vpy.context.scene
 
@@ -56,11 +54,9 @@ class CORE_OT_OpenScene(Operator):
     description = "Opens binary file as a scene."
     idname = "core.open_scene"
 
-    def execute(self, context: Context, *args, **kwargs) -> str:
-        if "path" not in kwargs:
-            self.report("ERROR", "Did not give path argument.")
-            return "CANCELLED"
+    kwargs_include = ("path",)
 
+    def execute(self, context: Context, *args, **kwargs) -> str:
         scene = Scene()
         with open(kwargs["path"], "rb") as file:
             scene.meta = file.read(struct.unpack(UINT, file.read(4))[0])

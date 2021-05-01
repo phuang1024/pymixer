@@ -101,14 +101,12 @@ class RENDER_OT_SaveImage(Operator):
     description = "Save image as a file."
     idname = "render.save_image"
 
+    kwargs_include = ("path",)
+
     def poll(self, context: Context, *args, **kwargs) -> bool:
         return context.render_result is not None
 
     def execute(self, context: Context, *args, **kwargs) -> str:
-        if "path" not in kwargs:
-            self.report("ERROR", "Did not give path argument.")
-            return "CANCELLED"
-
         pygame.image.save(vpy.utils.array_to_surf(context.render_result), kwargs["path"])
         return "FINISHED"
 

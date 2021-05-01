@@ -95,12 +95,32 @@ class Operator:
     description: str
     idname: str
 
+    min_args: int = None
+    max_args: int = None
+    kwargs_include: Tuple[str] = ()
+    kwargs_exclude: Tuple[str] = ()
+
     def __call__(self, *args, **kwargs) -> str:
         """
         Passes vpy.context to all methods that need it.
         First checks poll(). If it is successfull, then run execute()
         """
         import vpy
+
+        if self.min_args is not None and len(args) < self.min_args:
+            self.report("ERROR", f"Too few arguments in Operator {self.idname}")
+            return "CANCELLED"
+        if self.max_args is not None and len(args) > self.max_args:
+            self.report("ERROR", f"Too many arguments in Operator {self.idname}")
+            return "CANCELLED"
+        for arg in self.kwargs_include:
+            if arg not in kwargs:
+                self.report("ERROR", f"Must include kwarg {arg} in Operator {self.idname}")
+                return "CANCELLED"
+        for arg in self.kwargs_exclude:
+            if arg in kwargs:
+                self.report("ERROR", f"Must exclude kwarg {arg} in Operator {self.idname}")
+                return "CANCELLED"
 
         try:
             poll = self.poll(vpy.context, *args, **kwargs)
