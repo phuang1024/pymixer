@@ -62,13 +62,13 @@ class WindowManager:
             # Drag vertical separator
             if (shared.mouse_event_1 and x_sep-margin<=shared.mouse_pos[0]<=x_sep+margin) or self.dragging&1:
                 self.dragging |= 1
-                self.x_sep = shared.mouse_pos[0]/width
+                self.x_sep = bounds(shared.mouse_pos[0]/width)
 
             # Drag horizontal separator
             if (shared.mouse_event_1 and y_sep-margin<=shared.mouse_pos[1]<=y_sep+margin and
                     shared.mouse_pos[0]<=x_sep+margin) or self.dragging&2:
                 self.dragging |= 2
-                self.y_sep = shared.mouse_pos[1]/height
+                self.y_sep = bounds(shared.mouse_pos[1]/height)
 
         else:
             if self.dragging != 0:
@@ -90,6 +90,9 @@ class WindowManager:
         loc = (x_sep, 0)
         size = (width-x_sep, height)
         self.properties.draw(surface, loc, size)
+
+        # Status bar
+        pygame.draw.rect(surface, BLACK, (0, height, width, self.status_bar_height))
 
         # Window separating grid
         pygame.draw.line(surface, GRAY_DARK, (0, y_sep), (x_sep, y_sep), 2)

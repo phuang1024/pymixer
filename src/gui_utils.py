@@ -79,6 +79,10 @@ def register_module(file):
         pass
 
 
+def bounds(val, v_min=0, v_max=1):
+    return max(min(val, v_max), v_min)
+
+
 def kmod(key, target_key, ctrl=False, shift=False, alt=False):
     keys = pygame.key.get_pressed()
     ctrl_pressed = (keys[pygame.K_LCTRL] or keys[pygame.K_RCTRL])
