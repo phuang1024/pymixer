@@ -55,6 +55,7 @@ class Preview:
         self.draw_loc = loc
 
         if self.op_calls != vpy.context.op_calls:
+            # TODO also re-render when a property changes.
             vpy.ops.render.render_image()
             self.op_calls = vpy.context.op_calls
 
