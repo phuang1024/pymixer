@@ -48,13 +48,13 @@ def register_class(cls) -> None:
         if not hasattr(coll, name):
             coll.operators[name] = cls()
 
-        for letter, shift, alt, ctrl in cls.kboard_shortcuts:
+        for i, (letter, shift, alt, ctrl) in enumerate(cls.kboard_shortcuts):
             v = ord(letter)
             if not 0 <= v < 256:
                 raise ValueError(f"Invalid key {letter} in Operator {cls.idname} keyboard shortcut.")
             idx = v + (shift<<8) + (alt<<9) + (ctrl<<10)
             if idx in vpy.data.kboard_shortcuts:
-                #TODO warning
+                vpy.logging.warning(f"Operator {cls.idname} keyboard shortcut {i+1} already exists, skipping.")
                 continue
             vpy.data.kboard_shortcuts[idx] = cls.idname
 

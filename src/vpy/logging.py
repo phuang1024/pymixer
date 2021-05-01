@@ -17,10 +17,33 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from . import logging
-from . import types
-from . import utils
+import sys
 
-context = types.Context()
-data = types.Data()
-ops = types.OpsModule()
+RESET =  "\x1b[39m"
+RED =    "\x1b[31m"
+YELLOW = "\x1b[33m"
+CYAN =   "\x1b[36m"
+
+
+def info(msg, type_notice=True):
+    sys.stdout.write(CYAN)
+    if type_notice:
+        sys.stdout.write("INFO: ")
+    sys.stdout.write(msg+"\n")
+    sys.stdout.write(RESET)
+
+
+def warning(msg, type_notice=True):
+    sys.stdout.write(YELLOW)
+    if type_notice:
+        sys.stdout.write("WARNING: ")
+    sys.stdout.write(msg+"\n")
+    sys.stdout.write(RESET)
+
+
+def error(msg, type_notice=True):
+    sys.stdout.write(RED)
+    if type_notice:
+        sys.stdout.write("ERROR: ")
+    sys.stdout.write(msg+"\n")
+    sys.stdout.write(RESET)
