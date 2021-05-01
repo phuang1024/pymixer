@@ -36,10 +36,10 @@ class WindowManager:
 
     def __init__(self, prefs: Preferences):
         self.prefs = prefs
-        if not prefs.has("layout.verticalsep"):
-            prefs.set("layout.verticalsep", 0.8)
-        if not prefs.has("layout.horizontalsep"):
-            prefs.set("layout.horizontalsep", 0.5)
+        if not prefs.has("ui.verticalsep"):
+            prefs.set("ui.verticalsep", 0.8)
+        if not prefs.has("ui.horizontalsep"):
+            prefs.set("ui.horizontalsep", 0.5)
 
         self.preview = Preview()
         self.sequencer = Sequencer()
@@ -48,8 +48,8 @@ class WindowManager:
         # self.cursor = Cursor()
 
         self.dragging = 0    # bit 0 = dragging vertical, bit 1 = dragging horizontal
-        self.x_sep = self.prefs.get("layout.verticalsep")
-        self.y_sep = self.prefs.get("layout.horizontalsep")
+        self.x_sep = self.prefs.get("ui.verticalsep")
+        self.y_sep = self.prefs.get("ui.horizontalsep")
 
     def draw(self, surface):
         width, height = surface.get_size()
@@ -74,8 +74,8 @@ class WindowManager:
 
         else:
             if self.dragging != 0:
-                self.prefs.set("layout.verticalsep", self.x_sep)
-                self.prefs.set("layout.horizontalsep", self.y_sep)
+                self.prefs.set("ui.verticalsep", self.x_sep)
+                self.prefs.set("ui.horizontalsep", self.y_sep)
             self.dragging = 0
 
         # Preview
