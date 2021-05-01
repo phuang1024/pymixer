@@ -19,6 +19,7 @@
 
 import numpy as np
 import pygame
+from typing import Tuple, Union
 pygame.init()
 
 GET_PROP = """
@@ -49,10 +50,10 @@ def register_class(cls) -> None:
             coll.operators[name] = cls()
 
         for i, (letter, shift, alt, ctrl) in enumerate(cls.kboard_shortcuts):
-            v = ord(letter)
+            v = ord(letter.lower())
             if not 0 <= v < 256:
                 raise ValueError(f"Invalid key {letter} in Operator {cls.idname} keyboard shortcut.")
-            idx = v + (shift<<8) + (alt<<9) + (ctrl<<10)
+            idx = kboard_shortcut_value((letter, shift, alt, ctrl))
             if idx in vpy.data.kboard_shortcuts:
                 vpy.logging.warning(f"Operator {cls.idname} keyboard shortcut {i+1} already exists, skipping.")
                 continue
@@ -81,6 +82,20 @@ def register_class(cls) -> None:
 
 def unregister_class(cls) -> None:
     import vpy
+
+
+def kboard_shortcut_value(shortcut: Tuple[str, bool, bool, bool]) -> int:
+    letter, shift, alt, ctrl = shortcut
+    return ord(letter.lower()) + (shift<<8) + (alt<<9) + (ctrl<<10)
+
+def get_op_from_kboard_shortcut(shortcut: Tuple[str, bool, bool, bool]) -> Union[None, str]:
+    import vpy
+
+    idx = kboard_shortcut_value(shortcut)
+    if idx in vpy.data.kboard_shortcuts:
+        return vpy.data.kboard_shortcuts[idx]
+    else:
+        return None
 
 
 def surf_to_array(surf: pygame.Surface) -> np.ndarray:

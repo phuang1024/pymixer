@@ -117,7 +117,7 @@ class Operator:
     kwargs_exclude: Tuple[str] = ()
 
     # Tuple of (letter, shift, alt, ctrl)
-    kboard_shortcuts: Tuple[Tuple] = ()
+    kboard_shortcuts: Tuple[Tuple[str, bool, bool, bool]] = ()
 
     def __call__(self, *args, **kwargs) -> str:
         """
