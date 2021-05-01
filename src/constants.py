@@ -55,6 +55,14 @@ GRAY = (128, 128, 128)
 GRAY_LIGHT = (192, 192, 192)
 WHITE = (255, 255, 255)
 
+REPORT_INFO = (80, 110, 170)
+REPORT_WARNING = (190, 150, 90)
+REPORT_ERROR = (180, 60, 60)
+
+FONT_SMALL = pygame.font.SysFont("ubuntu", 14)
+FONT_MED = pygame.font.SysFont("ubuntu", 28)
+FONT_LARGE = pygame.font.SysFont("ubuntu", 48)
+
 run = True
 
 

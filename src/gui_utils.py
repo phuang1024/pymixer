@@ -82,6 +82,16 @@ def register_module(file):
 def bounds(val, v_min=0, v_max=1):
     return max(min(val, v_max), v_min)
 
+def report_color(type):
+    if type == "INFO":
+        return REPORT_INFO
+    elif type == "WARNING":
+        return REPORT_WARNING
+    elif type == "ERROR":
+        return REPORT_ERROR
+    else:
+        raise ValueError(f"Invalid report type: {type}")
+
 
 def kmod(key, target_key, ctrl=False, shift=False, alt=False):
     keys = pygame.key.get_pressed()

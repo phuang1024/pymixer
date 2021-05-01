@@ -17,6 +17,7 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+import os
 import struct
 import vpy
 from vpy.types import Context, Operator, Scene
@@ -46,6 +47,7 @@ class CORE_OT_SaveScene(Operator):
             file.write(scene.date)
             file.write(bytes([scene.is_saved, scene.is_dirty]))
 
+        self.report("INFO", "Saved {}".format(os.path.basename(kwargs["path"])))
         return "FINISHED"
 
 

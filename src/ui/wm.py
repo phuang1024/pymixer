@@ -17,6 +17,7 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+import time
 import pygame
 import shared
 from constants import *
@@ -30,7 +31,8 @@ pygame.init()
 
 class WindowManager:
     drag_margin = 5
-    status_bar_height = 20
+    status_bar_height = 28
+    report_time = 10
 
     def __init__(self, prefs: Preferences):
         self.prefs = prefs
@@ -93,6 +95,16 @@ class WindowManager:
 
         # Status bar
         pygame.draw.rect(surface, BLACK, (0, height, width, self.status_bar_height))
+        if vpy.context.last_report is not None and vpy.context.last_report_time >= time.time()-self.report_time:
+            report = vpy.context.last_report
+            text = FONT_SMALL.render(report[1], True, WHITE)
+            w, h = text.get_size()
+
+            text_x = width/2 - w/2
+            text_y = height + self.status_bar_height/2 - h/2
+            rect_coords = (text_x-3, text_y-2, w+6, h+4)
+            pygame.draw.rect(surface, report_color(report[0]), rect_coords, border_radius=2)
+            surface.blit(text, (text_x, text_y))
 
         # Window separating grid
         pygame.draw.line(surface, GRAY_DARK, (0, y_sep), (x_sep, y_sep), 2)

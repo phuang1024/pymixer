@@ -73,9 +73,15 @@ class Context:
     scene: Scene
     render_result: np.ndarray
 
+    last_report: Tuple[str]
+    last_report_time: int
+
     def __init__(self) -> None:
         self.scene = None
         self.render_result = None
+
+        self.last_report = None
+        self.last_report_time = 0
 
 
 class Operator:
@@ -105,11 +111,13 @@ class Operator:
 
     def report(self, type: str, msg: str) -> None:
         """
-        Sends a message to stdout, as of now.
+        Sends a message in the status bar.
         :param type: INFO, WARNING, or ERROR.
         :param msg: Message to send.
         """
-        print(f"{type}: {msg}")
+        import vpy
+        vpy.context.last_report = (type, msg)
+        vpy.context.last_report_time = time.time()
 
     def poll(self, context: Context, *args, **kwargs) -> bool:
         """
