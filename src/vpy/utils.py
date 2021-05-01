@@ -53,6 +53,7 @@ def register_class(cls) -> None:
             v = ord(letter.lower())
             if not 0 <= v < 256:
                 raise ValueError(f"Invalid key {letter} in Operator {cls.idname} keyboard shortcut.")
+
             idx = kboard_shortcut_value((letter, shift, alt, ctrl))
             if idx in vpy.data.kboard_shortcuts:
                 vpy.logging.warning(f"Operator {cls.idname} keyboard shortcut {i+1} already exists, skipping.")

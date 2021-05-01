@@ -26,3 +26,6 @@ mouse_event_2 = None
 mouse_event_3 = None
 
 keys_pressed = None
+keys_ctrl = None
+keys_shift = None
+keys_alt = None

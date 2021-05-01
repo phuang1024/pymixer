@@ -86,11 +86,17 @@ def gui():
         # Set constants to minimize pygame calls
         shared.mouse_pos = pygame.mouse.get_pos()
         shared.mouse_pressed = pygame.mouse.get_pressed()
-        shared.keys_pressed = pygame.key.get_pressed()
+
         shared.events = events
         shared.mouse_event_1 = False
         shared.mouse_event_2 = False
         shared.mouse_event_3 = False
+
+        shared.keys_pressed = pygame.key.get_pressed()
+        shared.keys_ctrl = (shared.keys_pressed[pygame.K_LCTRL] or shared.keys_pressed[pygame.K_RCTRL])
+        shared.keys_shift = (shared.keys_pressed[pygame.K_LSHIFT] or shared.keys_pressed[pygame.K_RSHIFT])
+        shared.keys_alt = (shared.keys_pressed[pygame.K_LALT] or shared.keys_pressed[pygame.K_RALT])
+
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:

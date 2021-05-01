@@ -52,6 +52,11 @@ class WindowManager:
         self.y_sep = self.prefs.get("ui.horizontalsep")
 
     def draw(self, surface):
+        # Keyboard shortcuts for operators
+        for event in shared.events:
+            if event.type == pygame.KEYDOWN:
+                pass
+
         width, height = surface.get_size()
         height -= self.status_bar_height
         x_sep = self.x_sep*width
