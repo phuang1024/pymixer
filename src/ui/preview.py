@@ -44,6 +44,7 @@ class Preview:
 
         self.size = 540
         self.loc = [0, 0]
+        self.op_calls = None
 
         self.dragging = False         # Whether currently dragging
         self.drag_start_pos = None    # Mouse position at start of drag
@@ -52,6 +53,10 @@ class Preview:
     def draw(self, surface, loc, size):
         self.draw_size = size
         self.draw_loc = loc
+
+        if self.op_calls != vpy.context.op_calls:
+            vpy.ops.render.render_image()
+            self.op_calls = vpy.context.op_calls
 
         # Check events
         if cursor_inside(loc, size):
@@ -88,12 +93,17 @@ class Preview:
             x_center = loc[0] + size[0]/2
             y_center = loc[1] + size[1]/2
 
-            # Draw grid
             width = self.size
             height = width / vpy.context.scene.output.x_res.get() * vpy.context.scene.output.y_res.get()
             x = x_center + self.loc[0] - width/2
             y = y_center + self.loc[1] - height/2
 
+            # Blit render
+            render = vpy.utils.array_to_surf(vpy.context.render_result)
+            render = pygame.transform.scale(render, (int(width), int(height)))
+            surf.blit(render, (x, y))
+
+            # Draw grid
             draw_dashed_line(surf, (x, y), (x+width, y), 6, GRAY, 1)
             draw_dashed_line(surf, (x, y+height), (x+width, y+height), 6, GRAY, 1)
             draw_dashed_line(surf, (x, y), (x, y+height), 6, GRAY, 1)

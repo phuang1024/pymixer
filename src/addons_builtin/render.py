@@ -92,7 +92,9 @@ class RENDER_OT_RenderImage(Operator):
 
     def execute(self, context: Context, *args, **kwargs):
         # TODO render image
-        context.render_result = vpy.utils.surf_to_array(pygame.Surface((1280, 720)))
+        img = pygame.Surface((1280, 720))
+        img.fill((255, 255, 255))
+        context.render_result = vpy.utils.surf_to_array(img)
         return "FINISHED"
 
 
