@@ -102,11 +102,18 @@ class Operator:
         """
         import vpy
 
-        if self.poll(vpy.context, *args, **kwargs):
+        try:
+            poll = self.poll(vpy.context, *args, **kwargs)
+        except:
+            poll = False
+
+        if poll:
             val = self.execute(vpy.context, *args, **kwargs)
             if val not in ("FINISHED", "CANCELLED"):
-                raise ValueError("Invalid return in Operator call.")
+                self.report("ERROR", f"Invalid return in Operator {self.idname} call.")
+                return "FINISHED"
         else:
+            self.report("ERROR", f"Poll in Operator {self.idname} failed.")
             return "CANCELLED"
 
     def report(self, type: str, msg: str) -> None:
@@ -140,7 +147,7 @@ class Operator:
         :param args: Any other arguments the operator needs.
         :param kwargs: Any other arguments the operator needs.
         """
-        return {"status": True}
+        return "FINISHED"
 
 class OpCollection:
     """
