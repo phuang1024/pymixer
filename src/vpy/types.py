@@ -19,13 +19,14 @@
 
 import time
 import numpy as np
-from typing import Any, Dict, Tuple
+from typing import Any, Dict, List, Tuple
 from datetime import datetime
 
 
 # Class "declaration" needed for type hinting.
 class Scene: pass
 class Context: pass
+class Data: pass
 class Operator: pass
 class OpCollection: pass
 class OpsModule: pass
@@ -86,6 +87,19 @@ class Context:
         self.last_report_time = 0
 
 
+class Data:
+    """
+    Stores data information, like keyboard shortcuts.
+    """
+
+    # key: lowest 8 bits = ascii of kboard letter, next bits = shift, alt, ctrl
+    # value: idname of operator
+    kboard_shortcuts: Dict[int, str]
+
+    def __init__(self):
+        self.kboard_shortcuts = {}
+
+
 class Operator:
     """
     Operator class. Displayed as a button in the GUI.
@@ -101,6 +115,9 @@ class Operator:
     max_args: int = None
     kwargs_include: Tuple[str] = ()
     kwargs_exclude: Tuple[str] = ()
+
+    # Tuple of (letter, shift, alt, ctrl)
+    kboard_shortcuts: Tuple[Tuple] = ()
 
     def __call__(self, *args, **kwargs) -> str:
         """

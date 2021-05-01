@@ -39,7 +39,7 @@ def register_class(cls) -> None:
 
     if issubclass(cls, vpy.types.Operator):
         if not cls.idname.count(".") == 1:
-            raise ValueError("Operator idname must have exactly 1 \".\"")
+            raise ValueError(f"Operator {cls.idname} idname must have exactly 1 period")
 
         group, name = cls.idname.split(".")
         if not hasattr(vpy.ops, group):
@@ -48,9 +48,19 @@ def register_class(cls) -> None:
         if not hasattr(coll, name):
             coll.operators[name] = cls()
 
+        for letter, shift, alt, ctrl in cls.kboard_shortcuts:
+            v = ord(letter)
+            if not 0 <= v < 256:
+                raise ValueError(f"Invalid key {letter} in Operator {cls.idname} keyboard shortcut.")
+            idx = v + (shift<<8) + (alt<<9) + (ctrl<<10)
+            if idx in vpy.data.kboard_shortcuts:
+                #TODO warning
+                continue
+            vpy.data.kboard_shortcuts[idx] = cls.idname
+
     elif issubclass(cls, vpy.types.PropertyGroup):
         if not cls.idname.count(".") == 0:
-            raise ValueError("PropertyGroup idname must not have a dot.")
+            raise ValueError(f"PropertyGroup {cls.idname} idname must not have a dot.")
 
         coll = vpy.types.PropCollection()
         for attr in cls.__dict__:
@@ -67,7 +77,7 @@ def register_class(cls) -> None:
         setattr(vpy.types.Scene, cls.idname, coll)
 
     else:
-        raise ValueError("Class to register must inherit from Operator")
+        raise ValueError("Class to register must inherit from Operator or PropertyGroup")
 
 def unregister_class(cls) -> None:
     import vpy

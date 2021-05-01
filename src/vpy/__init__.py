@@ -21,4 +21,5 @@ from . import types
 from . import utils
 
 context = types.Context()
+data = types.Data()
 ops = types.OpsModule()
