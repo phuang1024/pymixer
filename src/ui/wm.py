@@ -30,6 +30,7 @@ pygame.init()
 
 class WindowManager:
     drag_margin = 5
+    status_bar_height = 20
 
     def __init__(self, prefs: Preferences):
         self.prefs = prefs
@@ -41,6 +42,7 @@ class WindowManager:
         self.preview = Preview()
         self.sequencer = Sequencer()
         self.properties = Properties()
+
         # self.cursor = Cursor()
 
         self.dragging = 0    # bit 0 = dragging vertical, bit 1 = dragging horizontal
@@ -49,6 +51,7 @@ class WindowManager:
 
     def draw(self, surface):
         width, height = surface.get_size()
+        height -= self.status_bar_height
         x_sep = self.x_sep*width
         y_sep = self.y_sep*height
 
@@ -91,3 +94,4 @@ class WindowManager:
         # Window separating grid
         pygame.draw.line(surface, GRAY_DARK, (0, y_sep), (x_sep, y_sep), 2)
         pygame.draw.line(surface, GRAY_DARK, (x_sep, 0), (x_sep, height), 2)
+        pygame.draw.line(surface, GRAY_DARK, (0, height), (width, height), 2)
