@@ -58,7 +58,7 @@ class WindowManager:
                 if 0 <= event.key < 256:
                     key = chr(event.key)
                     shortcut = (key, shared.keys_shift, shared.keys_alt, shared.keys_ctrl)
-                    idname = vpy.utils.get_op_from_kboard_shortcut(shortcut)
+                    idname = vpy.utils.shortcut_to_op(shortcut)
                     if idname is not None:
                         group, name = idname.split(".")
                         getattr(getattr(vpy.ops, group), name)()

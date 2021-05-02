@@ -54,7 +54,7 @@ def register_class(cls) -> None:
             if not 0 <= v < 256:
                 raise ValueError(f"Invalid key {letter} in Operator {cls.idname} keyboard shortcut.")
 
-            idx = kboard_shortcut_value((letter, shift, alt, ctrl))
+            idx = shortcut_value((letter, shift, alt, ctrl))
             if idx in vpy.data.kboard_shortcuts:
                 vpy.logging.warning(f"Operator {cls.idname} keyboard shortcut {i+1} already exists, skipping.")
                 continue
@@ -85,14 +85,14 @@ def unregister_class(cls) -> None:
     import vpy
 
 
-def kboard_shortcut_value(shortcut: Tuple[str, bool, bool, bool]) -> int:
+def shortcut_value(shortcut: Tuple[str, bool, bool, bool]) -> int:
     letter, shift, alt, ctrl = shortcut
     return ord(letter.lower()) + (shift<<8) + (alt<<9) + (ctrl<<10)
 
-def get_op_from_kboard_shortcut(shortcut: Tuple[str, bool, bool, bool]) -> Union[None, str]:
+def shortcut_to_op(shortcut: Tuple[str, bool, bool, bool]) -> Union[None, str]:
     import vpy
 
-    idx = kboard_shortcut_value(shortcut)
+    idx = shortcut_value(shortcut)
     if idx in vpy.data.kboard_shortcuts:
         return vpy.data.kboard_shortcuts[idx]
     else:
