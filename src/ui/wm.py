@@ -18,6 +18,7 @@
 #
 
 import time
+import colorsys
 import pygame
 import shared
 from constants import *
@@ -108,13 +109,26 @@ class WindowManager:
         pygame.draw.rect(surface, BLACK, (0, height, width, self.status_bar_height))
         if vpy.context.last_report is not None and vpy.context.last_report_time >= time.time()-self.report_time:
             report = vpy.context.last_report
+
+            color = report_color(report[0])
+            color = [c/255 for c in color]
+            h, s, v = colorsys.rgb_to_hsv(*color)
+
+            # Fade in
+            if time.time() <= vpy.context.last_report_time+0.5:
+                fac = 2 * (time.time()-vpy.context.last_report_time)
+                s *= fac
+
+            color = colorsys.hsv_to_rgb(h, s, v)
+            color = [255*c for c in color]
+
             text = FONT_SMALL.render(report[0].capitalize()+": "+report[1], True, WHITE)
             w, h = text.get_size()
 
             text_x = width/2 - w/2
             text_y = height + self.status_bar_height/2 - h/2 + 1
             rect_coords = (text_x-3, text_y-2, w+6, h+4)
-            pygame.draw.rect(surface, report_color(report[0]), rect_coords, border_radius=2)
+            pygame.draw.rect(surface, color, rect_coords, border_radius=2)
             surface.blit(text, (text_x, text_y))
 
         # Window separating grid
