@@ -30,6 +30,21 @@ pygame.init()
 Tk().withdraw()
 
 
+def saveas():
+    path = asksaveasfilename(
+        defaultextension=".mix",
+        filetypes=(
+            ("Mix File", "*.mix"),
+            ("All Files", "*.*")
+        )
+    )
+    if path:
+        vpy.ops.core.save_scene(path=path)
+        vpy.context.scene.is_saved = True
+
+    return path
+
+
 def gui():
     setup_api()
     path = ""
@@ -66,16 +81,10 @@ def gui():
                         vpy.ops.core.save_scene(path=path)
                         vpy.context.scene.is_saved = True
                     else:
-                        path = asksaveasfilename()
-                        if path:
-                            vpy.ops.core.save_scene(path=path)
-                            vpy.context.scene.is_saved = True
+                        path = saveas()
 
                 elif kmod(event.key, pygame.K_s, ctrl=True, shift=True):
-                    path = asksaveasfilename()
-                    if path:
-                        vpy.ops.core.save_scene(path=path)
-                        vpy.context.scene.is_saved = True
+                    path = saveas()
 
                 elif kmod(event.key, pygame.K_o, ctrl=True):
                     path = askopenfilename()
