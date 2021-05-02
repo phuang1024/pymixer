@@ -32,7 +32,7 @@ pygame.init()
 class WindowManager:
     drag_margin = 5
     status_bar_height = 28
-    report_time = 10
+    report_time = 6
 
     def __init__(self, prefs: Preferences):
         self.prefs = prefs
@@ -112,7 +112,7 @@ class WindowManager:
             w, h = text.get_size()
 
             text_x = width/2 - w/2
-            text_y = height + self.status_bar_height/2 - h/2
+            text_y = height + self.status_bar_height/2 - h/2 + 1
             rect_coords = (text_x-3, text_y-2, w+6, h+4)
             pygame.draw.rect(surface, report_color(report[0]), rect_coords, border_radius=2)
             surface.blit(text, (text_x, text_y))
@@ -120,4 +120,4 @@ class WindowManager:
         # Window separating grid
         pygame.draw.line(surface, GRAY_DARK, (0, y_sep), (x_sep, y_sep), 2)
         pygame.draw.line(surface, GRAY_DARK, (x_sep, 0), (x_sep, height), 2)
-        pygame.draw.line(surface, GRAY_DARK, (0, height), (width, height), 2)
+        pygame.draw.line(surface, GRAY_DARK, (0, height), (width, height), 3)
