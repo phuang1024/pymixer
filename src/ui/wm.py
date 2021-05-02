@@ -33,7 +33,9 @@ pygame.init()
 class WindowManager:
     drag_margin = 5
     status_bar_height = 28
+
     report_time = 6
+    report_fade_time = 0.5
 
     def __init__(self, prefs: Preferences):
         self.prefs = prefs
@@ -115,9 +117,14 @@ class WindowManager:
             h, s, v = colorsys.rgb_to_hsv(*color)
 
             # Fade in
-            if time.time() <= vpy.context.last_report_time+0.5:
+            if time.time() <= vpy.context.last_report_time+self.report_fade_time:
                 fac = 2 * (time.time()-vpy.context.last_report_time)
                 s *= fac
+
+            # Fade out
+            if time.time() >= vpy.context.last_report_time+self.report_time-self.report_fade_time:
+                fac = 2 * ((vpy.context.last_report_time+self.report_time) - time.time())
+                v *= fac
 
             color = colorsys.hsv_to_rgb(h, s, v)
             color = [255*c for c in color]
