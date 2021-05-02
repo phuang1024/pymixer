@@ -44,7 +44,7 @@ class Preview:
 
         self.size = 540
         self.loc = [0, 0]
-        self.op_calls = None
+        self.num_changes = None
 
         self.dragging = False         # Whether currently dragging
         self.drag_start_pos = None    # Mouse position at start of drag
@@ -54,10 +54,10 @@ class Preview:
         self.draw_size = size
         self.draw_loc = loc
 
-        if self.op_calls != vpy.context.op_calls:
+        if self.num_changes != vpy.context.num_changes:
             # TODO also re-render when a property changes.
             vpy.ops.render.render_image()
-            self.op_calls = vpy.context.op_calls
+            self.num_changes = vpy.context.num_changes
 
         # Check events
         if cursor_inside(loc, size):

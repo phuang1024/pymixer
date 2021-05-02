@@ -73,7 +73,7 @@ class Context:
 
     scene: Scene
     render_result: np.ndarray
-    op_calls: int
+    num_changes: int
 
     last_report: Tuple[str]
     last_report_time: int
@@ -81,7 +81,7 @@ class Context:
     def __init__(self) -> None:
         self.scene = None
         self.render_result = None
-        self.op_calls = 0
+        self.num_changes = 0
 
         self.last_report = None
         self.last_report_time = 0
@@ -125,7 +125,7 @@ class Operator:
         First checks poll(). If it is successfull, then run execute()
         """
         import vpy
-        vpy.context.op_calls += 1
+        vpy.context.num_changes += 1
 
         if self.min_args is not None and len(args) < self.min_args:
             self.report("ERROR", f"Too few arguments in Operator {self.idname}")
