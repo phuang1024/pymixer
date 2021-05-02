@@ -112,6 +112,7 @@ class WindowManager:
         if vpy.context.last_report is not None and vpy.context.last_report_time >= time.time()-self.report_time:
             report = vpy.context.last_report
 
+            text_col = 255
             color = report_color(report[0])
             color = [c/255 for c in color]
             h, s, v = colorsys.rgb_to_hsv(*color)
@@ -125,11 +126,12 @@ class WindowManager:
             if time.time() >= vpy.context.last_report_time+self.report_time-self.report_fade_time:
                 fac = 2 * ((vpy.context.last_report_time+self.report_time) - time.time())
                 v *= fac
+                text_col *= fac
 
             color = colorsys.hsv_to_rgb(h, s, v)
             color = [255*c for c in color]
 
-            text = FONT_SMALL.render(report[0].capitalize()+": "+report[1], True, WHITE)
+            text = FONT_SMALL.render(report[0].capitalize()+": "+report[1], True, [text_col]*3)
             w, h = text.get_size()
 
             text_x = width/2 - w/2
