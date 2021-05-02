@@ -27,9 +27,14 @@ from datetime import datetime
 class Scene: pass
 class Context: pass
 class Data: pass
+
+class Tab: pass
+class Area: pass
+
 class Operator: pass
 class OpCollection: pass
 class OpsModule: pass
+
 class Property: pass
 class BoolProp: pass
 class IntProp: pass
@@ -64,7 +69,6 @@ class Scene:
         else:
             raise AttributeError(f"Scene has no attribute {attr}")
 
-
 class Context:
     """
     Context containing current info in GUI, such as current loaded scene.
@@ -85,7 +89,6 @@ class Context:
 
         self.last_report = None
         self.last_report_time = 0
-
 
 class Data:
     """
@@ -222,6 +225,32 @@ class OpsModule:
             return self.colls[attr]
         else:
             raise AttributeError(f"OpsModule has no attribute {attr}")
+
+
+class Tab:
+    idname: str
+    label: str
+
+    icon_path: str
+    icon: np.ndarray
+
+    def __init__(self) -> None:
+        self.icon_path = ""
+        self.icon = None
+
+class Area:
+    # TODO drawing and layout
+    idname: str
+    parent_idname: str
+    label: str
+
+    tab_id: str
+
+    def __init__(self) -> None:
+        pass
+
+    def draw(self, context: Context) -> None:
+        pass
 
 
 class Property:
