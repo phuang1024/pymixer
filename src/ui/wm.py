@@ -55,7 +55,13 @@ class WindowManager:
         # Keyboard shortcuts for operators
         for event in shared.events:
             if event.type == pygame.KEYDOWN:
-                pass
+                if 0 <= event.key < 256:
+                    key = chr(event.key)
+                    shortcut = (key, shared.keys_shift, shared.keys_alt, shared.keys_ctrl)
+                    idname = vpy.utils.get_op_from_kboard_shortcut(shortcut)
+                    if idname is not None:
+                        group, name = idname.split(".")
+                        getattr(getattr(vpy.ops, group), name)()
 
         width, height = surface.get_size()
         height -= self.status_bar_height

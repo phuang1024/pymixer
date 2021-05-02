@@ -36,7 +36,7 @@ class CORE_OT_SaveScene(Operator):
 
     def execute(self, context: Context, *args, **kwargs) -> str:
         with open(kwargs["path"], "wb") as file:
-            scene = vpy.context.scene
+            scene = context.scene
 
             file.write(struct.pack(UINT, len(scene.meta)))
             file.write(scene.meta)
@@ -65,7 +65,8 @@ class CORE_OT_OpenScene(Operator):
             scene.is_saved = (file.read(1) == "\x01")
             scene.is_dirty = (file.read(1) == "\x01")
 
-        vpy.context.scene = scene
+        context.scene = scene
+        self.report("INFO", "Opened {}".format(os.path.basename(kwargs["path"])))
         return "FINISHED"
 
 
