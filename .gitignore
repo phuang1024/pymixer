@@ -1,8 +1,7 @@
 __pycache__
 .vscode
 
-*.vid
-
+*.mix
 settings.json
 
 /api/build/
