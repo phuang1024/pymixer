@@ -30,6 +30,7 @@ class Data: pass
 
 class Tab: pass
 class Area: pass
+class Layout: pass
 
 class Operator: pass
 class OpCollection: pass
@@ -242,14 +243,28 @@ class Area:
     # TODO drawing and layout
     idname: str
     parent_idname: str
+    tab_id: str
     label: str
 
-    tab_id: str
+    layout: Layout
 
     def __init__(self) -> None:
         pass
 
     def draw(self, context: Context) -> None:
+        pass
+
+class Layout:
+    def __init__(self) -> None:
+        pass
+
+    def label(self, text: str) -> None:
+        pass
+
+    def prop(self, group: PropCollection, idname: str) -> None:
+        pass
+
+    def operator(self, idname: str, args: Tuple[Any], kwargs: Dict[str, Any]) -> None:
         pass
 
 
